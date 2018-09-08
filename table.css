@@ -1,0 +1,148 @@
+html {
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  border: 2px solid rgb(200,200,200);
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  margin: 0 auto;
+}
+
+td, th {
+  border: 1px solid rgb(190,190,190);
+  padding: 10px 20px;
+}
+
+th {
+  background-color: rgb(235,235,235);
+}
+
+td {
+  text-align: left;
+  cursor: pointer;
+}
+
+tr:nth-child(even) td {
+  background-color: rgb(250,250,250);
+}
+
+tr:nth-child(odd) td {
+  background-color: rgb(245,245,245);
+}
+
+caption {
+  padding: 10px;
+}
+
+#date {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#sales-person {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+#product {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#transaction-type {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#invoice {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+#client {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+#memo {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+#revenue {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rate {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#comm {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.date {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.sales-person {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.product {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.transaction-type {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.invoice {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.client {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.memo {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.revenue {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.rate {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.comm {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+       /* <th class='date'>Date</th>
+        <th class='sales-person'>Sales Person</th>
+        <th class='product'>Product</th>
+        <th class='transaction-type'>Transaction Type</th>
+        <th class='invoice'>invoice</th>
+        <th class='client'>Client</th>
+        <th class='memo'>Memo/Description</th>
+        <th class='revenue'>Revenue</th>
+        <th class='rate'>Rate</th>
+        <th class='comm'>Comm</th>
+*/

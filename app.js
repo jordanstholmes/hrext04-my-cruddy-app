@@ -1,6 +1,21 @@
 $(document).ready(function() {
+  addTextBtnListener();
+  addDeleteBtnListener();
+});
 
+function addDeleteBtnListener() {
+  $(".del-text-btn").on("click", function() {
+    alert('item deleted? check the console'); // maybe change to a window.confirm
+    localStorage.removeItem( $('.user-input-title').val() ); // grab the title and plop here
+    $(".user-input-title").val("");
+    $(".user-input-body").val("");
+    // clearing display? what if I have multiple items?
+    // after item is removed from local storage, redisplay items from local storage
+    // refresh from storage?
+  });
+}
 
+function addTextBtnListener() {
   $(".add-text-btn").on("click", function(){
 
     // store values
@@ -15,7 +30,7 @@ $(document).ready(function() {
 
     localStorage.setItem(inputKey, inputValue);
     // data-
-    let itemHtml = '<div class="display-item" data-storage-key="'+inputKey+'"> ' + inputKey + ' ' +  localStorage.getItem(inputKey) + '</div>';
+    let itemHtml = `<div class="display-item" data-storage-key="${inputKey}">${inputKey} ${localStorage.getItem(inputKey)}</div>`;
     $(".display").html(itemHtml);
     //console.log(localStorage);
     // how can we delegate this event to the outer html node?
@@ -34,8 +49,12 @@ $(document).ready(function() {
     });
 
   });
+}
 
-
+   // iterative approach to adding items
+   // store data as stringified array of objects
+   // store data with individual keys
+  // how do we get keys? research Object.keys
 
    // TODO add back in later
    // $(".user-input").on("keyup", function(){
@@ -44,22 +63,6 @@ $(document).ready(function() {
    //   $(".display").text(localStorage.getItem("testStorage"));
    // });
 
-   $(".del-text-btn").on("click", function() {
-     alert('item deleted? check the console'); // maybe change to a window.confirm
-     localStorage.removeItem( $('.user-input-title').val() ); // grab the title and plop here
-     $(".user-input-title").val("");
-     $(".user-input-body").val("");
-     // clearing display? what if I have multiple items?
-     // after item is removed from local storage, redisplay items from local storage
-     // refresh from storage?
-   });
-
-
-   // iterative approach to adding items
-   // store data as stringified array of objects
-   // store data with individual keys
-  // how do we get keys? research Object.keys
 
 
 
-});

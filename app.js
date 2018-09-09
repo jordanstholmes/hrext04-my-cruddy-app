@@ -18,7 +18,9 @@ $(document).ready(function() {
 });
 
 function startButton(event) {
+  console.log('Start button clicked');
   if (recognizing) {
+    $('#speak-button').html('Speak');
     recognition.stop();
     return;
   }
@@ -26,11 +28,12 @@ function startButton(event) {
   recognition.lang = 'en-US';
   recognition.start();
   ignore_onend = false;
-  final_span.innerHTML = '';
-  interim_span.innerHTML = '';
-  start_img.src = 'mic-slash.gif';
-  showInfo('info_allow');
-  showButtons('none');
+  $("#speech-output").html('');
+  $('#speak-button').html('Stop');
+  // interim_span.innerHTML = '';
+  // start_img.src = 'mic-slash.gif';
+  // showInfo('info_allow');
+  // showButtons('none');
   start_timestamp = event.timeStamp;
 }
 
@@ -80,6 +83,7 @@ function addResultBehavior(speechObj) {
         interim_transcript += event.results[i][0].transcript;
       }
     }
+    $("#speech-output").html(final_transcript);
     // final_transcript = capitalize(final_transcript);
     // final_span.innerHTML = linebreak(final_transcript);
     // interim_span.innerHTML = linebreak(interim_transcript);
@@ -95,22 +99,22 @@ function addEndBehavior(speechObj) {
     if (ignore_onend) {
       return;
     }
-    start_img.src = 'mic.gif';
+    // start_img.src = 'mic.gif';
     if (!final_transcript) {
       showInfo('info_start');
       return;
     }
-    showInfo('');
+    // showInfo('');
     if (window.getSelection) {
       window.getSelection().removeAllRanges();
       var range = document.createRange();
       range.selectNode(document.getElementById('final_span'));
       window.getSelection().addRange(range);
     }
-    if (create_email) {
-      create_email = false;
-      createEmail();
-    }
+    // if (create_email) {
+    //   create_email = false;
+    //   createEmail();
+    // }
   };
 }
 

@@ -17,8 +17,6 @@ if (!('webkitSpeechRecognition' in window)) {
   var recognition = initializeSpeechObject();
 }
 
- // <button id="speak-button">Speak</button>
- //    <button id="compare-button">Compare</button>
  //    <button id="next-button">Next</button>
  //    <button id="previous-button">Previous</button>
  //    <button id="start-over-button">Start Over</button>
@@ -37,6 +35,9 @@ $(document).ready(function() {
   });
   $('#again-button').click(function() {
     againButton();
+  });
+  $('#next-button').click(function() {
+    nextButton();
   });
 });
 
@@ -60,7 +61,7 @@ COMPARING VOICE TO CHUNK
 
 function compareToChunk(voiceString, chunkIdx) {
   let voiceWords = voiceString.split(' ');
-  let chunkWords = JSON.parse(localStorage.getItem('chunks'))[chunkIdx][1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
+  let chunkWords = getChunksArray(chunkIdx)[1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
   let missed = chunkWords.reduce(function(acc, word) {
     if (!voiceWords.includes(word.toLowerCase())) {
       acc += '\t' +word + '\n';
@@ -85,6 +86,9 @@ function compareToChunk(voiceString, chunkIdx) {
 /****************************************************
 BUTTONS
 *****************************************************/
+function nextButton() {
+  clearComparisonDisplay();
+}
 
 function againButton() {
   clearComparisonDisplay();
@@ -95,7 +99,7 @@ function compareButton() {
   console.log(voiceString);
   // let resultStr = compareToChunk(voiceString, currentChunkIdx);
   compareToChunk(voiceString, currentChunkIdx);
-  let currentChunkOriginal = JSON.parse(localStorage.getItem('chunks'))[currentChunkIdx][0];
+  let currentChunkOriginal = getChunksArray(currentChunkIdx)[0];
   $('#original-chunk').html(currentChunkOriginal);
   // $('#comparison-details').html(resultStr);
   // console.log(resultStr); 
@@ -124,7 +128,7 @@ function memorizeButton(delimeter) {
   console.log(chunkedSourceText);
   console.log(strippedChunks);
   // console.log(chunks);
-  console.log(JSON.parse(localStorage.getItem('chunks')));
+  console.log(getChunksArray());
 }
 
 function speakButton(event) {
@@ -229,6 +233,14 @@ function clearComparisonDisplay() {
   $('#original-chunk').html('');
   $('#comparison-missed').html('');
   $('#comparison-added').html('');
+}
+
+function getChunksArray(idx) {
+  if (idx === undefined) {
+    return JSON.parse(localStorage.getItem('chunks'));
+  } else {
+    return JSON.parse(localStorage.getItem('chunks'))[idx]; 
+  }
 }
 
 

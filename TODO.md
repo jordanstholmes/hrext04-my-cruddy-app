@@ -7,10 +7,10 @@
 * [] display missed and added words
 * [x] Check for missing words (without regard for order)
 * [x] Check for extra words
-* [] Display full correct chunk
+* [x] Display full correct chunk
 * [] Button to return to source text input
-* [] Button to go to next chunk
-* [] Button to return to previous chunk
+* [x] Button to go to next chunk
+* [x] Button to return to previous chunk
 * [] Button to start from the beginning of memorization process
 * [x] Button to compare voice-to-text vs. stripped chunk
 

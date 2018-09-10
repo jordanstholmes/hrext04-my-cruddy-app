@@ -42,6 +42,9 @@ $(document).ready(function() {
   $('#previous-button').click(function() {
     previousButton();
   });
+  $('#start-over-button').click(function() {
+    startOverButton();
+  })
 });
 
 /****************************************************
@@ -95,6 +98,7 @@ function nextButton() {
   } else {
     clearComparisonDisplay();
     currentChunkIdx++;
+    displayLineLocation();
   }
 }
 
@@ -104,12 +108,19 @@ function previousButton() {
   } else {
     clearComparisonDisplay();
     currentChunkIdx--;
+    displayLineLocation();
   }
 }
 
 function againButton() {
   clearComparisonDisplay();
 }
+
+function startOverButton() {
+  clearComparisonDisplay();
+  currentChunkIdx = 0;
+  displayLineLocation();
+} 
 
 function compareButton() {
   let voiceString = $('#final-span').html();
@@ -141,6 +152,7 @@ function memorizeButton(delimeter) {
   localStorage.setItem('chunks', JSON.stringify(chunks));
 
   currentChunkIdx = 0;
+  displayLineLocation();
 
   console.log(chunkedSourceText);
   console.log(strippedChunks);
@@ -251,6 +263,7 @@ function clearComparisonDisplay() {
   $('#comparison-missed').html('');
   $('#comparison-added').html('');
   $('#error-display').html('');
+  $('#final-span').html('');
 }
 
 function getChunksArray(idx) {
@@ -259,6 +272,11 @@ function getChunksArray(idx) {
   } else {
     return JSON.parse(localStorage.getItem('chunks'))[idx]; 
   }
+}
+
+function displayLineLocation() {
+  let lineNumDisplay = (currentChunkIdx + 1).toString() + '/' + (getChunksArray().length).toString(); 
+  $('#line-location-display').html(lineNumDisplay);
 }
 
 

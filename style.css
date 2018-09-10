@@ -57,6 +57,11 @@ textarea {
   height: 50px;
 }
 
+#comparison-box {
+  border: 3px solid #949599;
+  width: 500px;
+  height: 100px;
+}
 
 
 

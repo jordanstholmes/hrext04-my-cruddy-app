@@ -68,14 +68,19 @@ function compareToChunk(voiceString, chunkIdx) {
     }
     return acc;
   }, '');
+  let missedStr = 'Missed:\n' + (missed || 'none!');
+  $('#comparison-missed').html(missedStr);
+
   let added = voiceWords.reduce(function(acc, word) {
     if (!chunkWords.includes(word.toLowerCase())) {
       acc += '\t' + word + '\n';
     }
     return acc;
   }, '');
+  let addedStr = 'Added:\n' + (added || 'none!');
+  $('#comparison-added').html(addedStr);
 
-  return 'Missed:\n' + (missed || 'none!')+ '\n' + 'Added:\n' + (added || 'none!');
+  // return 'Missed:\n' + (missed || 'none!')+ '\n' + 'Added:\n' + (added || 'none!');
 }
 
 /****************************************************
@@ -89,8 +94,12 @@ BUTTONS
 function compareButton() {
   let voiceString = $('#final-span').html();
   console.log(voiceString);
-  let resultStr = compareToChunk(voiceString, currentChunkIdx);
-  console.log(resultStr); 
+  // let resultStr = compareToChunk(voiceString, currentChunkIdx);
+  compareToChunk(voiceString, currentChunkIdx);
+  let currentChunkOriginal = JSON.parse(localStorage.getItem('chunks'))[currentChunkIdx][0];
+  $('#original-chunk').html(currentChunkOriginal);
+  // $('#comparison-details').html(resultStr);
+  // console.log(resultStr); 
 }
 
 function memorizeButton(delimeter) {
@@ -209,3 +218,10 @@ function addStartBehavior(speechObj) {
     recognizing = true;
   };
 }
+
+/****************************************************
+HELPER FUNCTIONS
+*****************************************************/
+
+
+

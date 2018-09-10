@@ -19,7 +19,6 @@ if (!('webkitSpeechRecognition' in window)) {
 
  // <button id="speak-button">Speak</button>
  //    <button id="compare-button">Compare</button>
- //    <button id="again-button">Try Again</button>
  //    <button id="next-button">Next</button>
  //    <button id="previous-button">Previous</button>
  //    <button id="start-over-button">Start Over</button>
@@ -36,9 +35,9 @@ $(document).ready(function() {
   $('#compare-button').click(function() {
     compareButton();
   });
-  // $('#again-button').click(function() {
-
-  // });
+  $('#again-button').click(function() {
+    againButton();
+  });
 });
 
 /****************************************************
@@ -87,9 +86,9 @@ function compareToChunk(voiceString, chunkIdx) {
 BUTTONS
 *****************************************************/
 
-// function again() {
-
-// }
+function againButton() {
+  clearComparisonDisplay();
+}
 
 function compareButton() {
   let voiceString = $('#final-span').html();
@@ -222,6 +221,14 @@ function addStartBehavior(speechObj) {
 /****************************************************
 HELPER FUNCTIONS
 *****************************************************/
-
+// <div id="original-chunk"></div>
+//       <div id="comparison-details">
+//         <div id="comparison-missed"></div>
+//         <div id="comparison-added"></div>
+function clearComparisonDisplay() {
+  $('#original-chunk').html('');
+  $('#comparison-missed').html('');
+  $('#comparison-added').html('');
+}
 
 

@@ -9,7 +9,7 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
-var currentChunkIdx = undefined;
+var currentChunkIdx = 0;
 
 if (!('webkitSpeechRecognition' in window)) {
   console.log('speech recognition not available in this browser');
@@ -23,6 +23,8 @@ if (!('webkitSpeechRecognition' in window)) {
  //    <script src="app.js"></script>
 
 $(document).ready(function() {
+  displayLineLocation();
+
   $('#speak-button').click(function(event) {
     speakButton(event);
   });
@@ -66,7 +68,7 @@ COMPARING VOICE TO CHUNK
 *****************************************************/
 
 function compareToChunk(voiceString, chunkIdx) {
-  let voiceWords = voiceString.split(' ');
+  let voiceWords = voiceString.trim().toLowerCase().split(' ');
   let chunkWords = getChunksArray(chunkIdx)[1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
   let missed = chunkWords.reduce(function(acc, word) {
     if (!voiceWords.includes(word.toLowerCase())) {
@@ -275,7 +277,12 @@ function getChunksArray(idx) {
 }
 
 function displayLineLocation() {
-  let lineNumDisplay = (currentChunkIdx + 1).toString() + '/' + (getChunksArray().length).toString(); 
+  let lineNumDisplay;
+  if (localStorage.getItem('chunks') === null) {
+    lineNumDisplay = '0/0';
+  } else {
+    lineNumDisplay = (currentChunkIdx + 1).toString() + '/' + (getChunksArray().length).toString(); 
+  }
   $('#line-location-display').html(lineNumDisplay);
 }
 

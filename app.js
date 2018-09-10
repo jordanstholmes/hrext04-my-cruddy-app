@@ -20,7 +20,7 @@ $(document).ready(function() {
     speakButton(event);
   });
   $('#memorize-button').click(function(event) {
-    memorizeButton();
+    memorizeButton('\n');
   });
 });
 
@@ -28,9 +28,29 @@ $(document).ready(function() {
 HANDLING SOURCE INPUT
 *****************************************************/
 
-function memorizeButton() {
-  let sourceText = $('#source-text-input').val();
+function memorizeButton(delimeter) {
+  let sourceText = $('#source-text-input').val().trim();
+  let last = sourceText.length - delimeter.length;
+  if (sourceText.slice(last) === delimeter) {
+    sourceText = sourceText.slice(0, last);
+  } 
   localStorage.setItem('source text', sourceText);
+
+  let chunkedSourceText = sourceText.split(delimeter).map(chunk => chunk.trim());
+  let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
+
+  console.log(chunkedSourceText);
+  console.log(strippedChunks);
+
+}
+
+function stripChunk(string) {
+  const punctuation = '.,-$?!()[]\'";:@#%/';
+  const whitespaceChars = '\n'
+  let stripped = string.split('').filter(function(elem) {
+    return !punctuation.includes(elem) && !whitespaceChars.includes(elem);
+  }).join('');
+  return stripped;
 }
 
 /****************************************************

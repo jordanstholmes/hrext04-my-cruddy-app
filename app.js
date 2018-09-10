@@ -1,4 +1,8 @@
 
+/****************************************************
+GLOBAL VARIABLES (refactor)
+*****************************************************/
+
 
 var final_transcript = '';
 var recognizing = false;
@@ -13,27 +17,39 @@ if (!('webkitSpeechRecognition' in window)) {
 
 $(document).ready(function() {
   $('#speak-button').click(function(event) {
-    startButton(event);
+    speakButton(event);
+  });
+  $('#memorize-button').click(function(event) {
+    memorizeButton();
   });
 });
 
-function startButton(event) {
-  console.log('Start button clicked');
+/****************************************************
+HANDLING SOURCE INPUT
+*****************************************************/
+
+function memorizeButton() {
+  let sourceText = $('#source-text-input').val();
+  localStorage.setItem('source text', sourceText);
+}
+
+/****************************************************
+SPEECH RECOGNITION STUFF
+*****************************************************/
+
+
+function speakButton(event) {
   if (recognizing) {
     $('#speak-button').html('Speak');
     recognition.stop();
     return;
   }
   final_transcript = '';
-  recognition.lang = 'en-US';
   recognition.start();
   ignore_onend = false;
-  $("#speech-output").html('');
+  $('#final-span').html('');
+  $('#interim-span').html('');
   $('#speak-button').html('Stop');
-  // interim_span.innerHTML = '';
-  // start_img.src = 'mic-slash.gif';
-  // showInfo('info_allow');
-  // showButtons('none');
   start_timestamp = event.timeStamp;
 }
 
@@ -41,6 +57,7 @@ function initializeSpeechObject() {
   var speechObj = new webkitSpeechRecognition();
   speechObj.continuous = true;
   speechObj.interimResults = true;
+  speechObj.lang = 'en-US';
 
   addErrorBehavior(speechObj);
   addResultBehavior(speechObj);
@@ -83,13 +100,8 @@ function addResultBehavior(speechObj) {
         interim_transcript += event.results[i][0].transcript;
       }
     }
-    $("#speech-output").html(final_transcript);
-    // final_transcript = capitalize(final_transcript);
-    // final_span.innerHTML = linebreak(final_transcript);
-    // interim_span.innerHTML = linebreak(interim_transcript);
-    // if (final_transcript || interim_transcript) {
-    //   showButtons('inline-block');
-    // }
+    $("#final-span").html(final_transcript);
+    $("#interim-span").html(interim_transcript);
   };
 }
 
@@ -99,22 +111,10 @@ function addEndBehavior(speechObj) {
     if (ignore_onend) {
       return;
     }
-    // start_img.src = 'mic.gif';
     if (!final_transcript) {
-      showInfo('info_start');
+      // showInfo('info_start');
       return;
     }
-    // showInfo('');
-    if (window.getSelection) {
-      window.getSelection().removeAllRanges();
-      var range = document.createRange();
-      range.selectNode(document.getElementById('final_span'));
-      window.getSelection().addRange(range);
-    }
-    // if (create_email) {
-    //   create_email = false;
-    //   createEmail();
-    // }
   };
 }
 

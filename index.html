@@ -15,11 +15,15 @@
 
 <!-- CONTENT -->
   <body>
-    <textarea placeholder="Enter the text to memorize"></textarea>
+    <textarea id="source-text-input" placeholder="Enter the text to memorize"></textarea>
     <br/>
-    <button id="start-button">Start</button>
+    <button id="memorize-button">Start</button>
     <br/>
-    <textarea id="speech-output" placeholder="What's the next line?"></textarea>
+    <div id="results">
+      <span id="final-span"></span>
+      <span id="interim-span"></span>
+    </div>
+    <!-- <textarea id="speech-output" placeholder="What's the next line?"></textarea> -->
     <br/>
     <button id="speak-button">Speak</button>
     <script src="app.js"></script>

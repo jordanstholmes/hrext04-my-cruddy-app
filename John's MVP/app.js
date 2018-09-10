@@ -41,6 +41,7 @@ function addTextBtnListener() {
 
       // get the values from the the divs?
       console.log("key=> ", e.target.dataset.storageKey); // user-input-title
+      console.log("event=> ", e); // user-input-title
       localStorage.getItem(e.target.dataset.storageKey); // user-input-body
 
       // set those values in the form fields

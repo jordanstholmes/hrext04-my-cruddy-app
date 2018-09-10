@@ -90,19 +90,19 @@ function compareToChunk(voiceString, chunkIdx) {
 BUTTONS
 *****************************************************/
 function nextButton() {
-  clearComparisonDisplay();
   if (getChunksArray().length - 1 === currentChunkIdx) {
-    $('#original-chunk').html('You\'ve reached the end!');
+    $('#error-display').html('You\'ve reached the end!');
   } else {
+    clearComparisonDisplay();
     currentChunkIdx++;
   }
 }
 
 function previousButton() {
-  clearComparisonDisplay();
   if (currentChunkIdx === 0) {
-    $('#original-chunk').html('You\'re already at the beginning!');
+    $('#error-display').html('You\'re already at the beginning!');
   } else {
+    clearComparisonDisplay();
     currentChunkIdx--;
   }
 }
@@ -250,6 +250,7 @@ function clearComparisonDisplay() {
   $('#original-chunk').html('');
   $('#comparison-missed').html('');
   $('#comparison-added').html('');
+  $('#error-display').html('');
 }
 
 function getChunksArray(idx) {

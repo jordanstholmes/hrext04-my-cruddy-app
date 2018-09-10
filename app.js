@@ -39,6 +39,9 @@ $(document).ready(function() {
   $('#next-button').click(function() {
     nextButton();
   });
+  $('#previous-button').click(function() {
+    previousButton();
+  });
 });
 
 /****************************************************
@@ -88,6 +91,20 @@ BUTTONS
 *****************************************************/
 function nextButton() {
   clearComparisonDisplay();
+  if (getChunksArray().length - 1 === currentChunkIdx) {
+    $('#original-chunk').html('You\'ve reached the end!');
+  } else {
+    currentChunkIdx++;
+  }
+}
+
+function previousButton() {
+  clearComparisonDisplay();
+  if (currentChunkIdx === 0) {
+    $('#original-chunk').html('You\'re already at the beginning!');
+  } else {
+    currentChunkIdx--;
+  }
 }
 
 function againButton() {

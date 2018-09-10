@@ -20,8 +20,11 @@ $(document).ready(function() {
   $('#speak-button').click(function(event) {
     speakButton(event);
   });
-  $('#memorize-button').click(function(event) {
+  $('#memorize-button').click(function() {
     memorizeButton('\n');
+  });
+  $('#compare-button').click(function() {
+    compareButton();
   });
 });
 
@@ -40,21 +43,23 @@ function memorizeButton(delimeter) {
   let chunkedSourceText = sourceText.split(delimeter).map(chunk => chunk.trim());
   let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
 
-  let chunksObj = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
+  let chunks = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
     result.push([sourceChunk, strippedChunks[idx]]);
     return result;
   }, []);
 
-  localStorage.setItem('chunksObj', chunksObj);
+  localStorage.setItem('chunks', JSON.stringify(chunks));
 
 
   console.log(chunkedSourceText);
   console.log(strippedChunks);
-  console.log(chunksObj);
+  // console.log(chunks);
+  console.log(JSON.parse(localStorage.getItem('chunks')));
 
 }
 
 function stripChunk(string) {
+  string = string.toLowerCase();
   const punctuation = '.,-$?!()[]\'";:@#%/';
   const whitespaceChars = '\n'
   let stripped = string.split('').filter(function(elem) {
@@ -67,11 +72,31 @@ function stripChunk(string) {
 COMPARING VOICE TO CHUNK
 *****************************************************/
 
-// function compareToChunk(voiceString, chunkIdx) {
-//   let voicWords = voiceString.split(' ');
-//   let chunkWords = 
+function compareButton() {
+  let voiceString = $('#final-span').text();
+  console.log(voiceString);
+  let resultStr = compareToChunk(voiceString, 0);
+  console.log(resultStr); 
+}
 
-// }
+function compareToChunk(voiceString, chunkIdx) {
+  let voiceWords = voiceString.split(' ');
+  let chunkWords = JSON.parse(localStorage.getItem('chunks'))[chunkIdx][1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
+  let missed = chunkWords.reduce(function(acc, word) {
+    if (!voiceWords.includes(word.toLowerCase())) {
+      acc += '\t' +word + '\n';
+    }
+    return acc;
+  }, '');
+  let added = voiceWords.reduce(function(acc, word) {
+    if (!chunkWords.includes(word.toLowerCase())) {
+      acc += '\t' + word + '\n';
+    }
+    return acc;
+  }, '');
+
+  return 'Missed:\n' + (missed || 'none!')+ '\n' + 'Added:\n' + (added || 'none!');
+}
 
 /****************************************************
 SPEECH RECOGNITION STUFF

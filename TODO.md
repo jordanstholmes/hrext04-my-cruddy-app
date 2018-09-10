@@ -4,14 +4,15 @@
 * [x] Button to save source text and begin memorization process
 * [x] Figure out API to input voice to text into text box
 * [] Input field to make edits
-* [] Check for missing words (without regard for order)
-* [] Check for extra words
+* [] display missed and added words
+* [x] Check for missing words (without regard for order)
+* [x] Check for extra words
 * [] Display full correct chunk
 * [] Button to return to source text input
 * [] Button to go to next chunk
 * [] Button to return to previous chunk
 * [] Button to start from the beginning of memorization process
-* [] Button to compare voice-to-text vs. stripped chunk
+* [x] Button to compare voice-to-text vs. stripped chunk
 
 ## App Features
 I propose to create an app that helps you memorize a speech, monologue, poem, etc.

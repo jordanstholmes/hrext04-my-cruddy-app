@@ -3,16 +3,22 @@
 * [x] Split input text into chunks
 * [x] Button to save source text and begin memorization process
 * [x] Figure out API to input voice to text into text box
-* [] Input field to make edits
+* [x] Input field to make edits
+  * [] protect against newline characters turning into line breaks
 * [x] display missed and added words
 * [x] Check for missing words (without regard for order)
 * [x] Check for extra words
 * [x] Display full correct chunk
-* [] Button to return to source text input
+  * [] deal with weird terminal punctuation
+* [] Button to display source text
 * [x] Button to go to next chunk
 * [x] Button to return to previous chunk
 * [x] Button to start from the beginning of memorization process
 * [x] Button to compare voice-to-text vs. stripped chunk
+
+* [] Add naming memorization sources
+* [] Add option to save and select several memorization things
+* [] Refactor for Model View Controller 
 
 ## App Features
 I propose to create an app that helps you memorize a speech, monologue, poem, etc.

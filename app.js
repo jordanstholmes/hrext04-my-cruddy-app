@@ -19,7 +19,7 @@ if (!('webkitSpeechRecognition' in window)) {
 
  //    <button id="next-button">Next</button>
  //    <button id="previous-button">Previous</button>
- //    <button id="start-over-button">Start Over</button>
+ //    <button id="beginning-button">Start Over</button>
  //    <script src="app.js"></script>
 
 $(document).ready(function() {
@@ -44,7 +44,7 @@ $(document).ready(function() {
   $('#previous-button').click(function() {
     previousButton();
   });
-  $('#start-over-button').click(function() {
+  $('#beginning-button').click(function() {
     startOverButton();
   })
 });
@@ -154,6 +154,9 @@ function memorizeButton(delimeter) {
   localStorage.setItem('chunks', JSON.stringify(chunks));
 
   currentChunkIdx = 0;
+  clearComparisonDisplay();
+  clearSourceTextDisplay();
+
   displayLineLocation();
 
   console.log(chunkedSourceText);
@@ -286,4 +289,7 @@ function displayLineLocation() {
   $('#line-location-display').html(lineNumDisplay);
 }
 
+function clearSourceTextDisplay() {
+  $('#source-text-input').val('');
+}
 

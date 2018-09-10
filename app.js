@@ -9,6 +9,7 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
+var currentChunkIdx = undefined;
 
 if (!('webkitSpeechRecognition' in window)) {
   console.log('speech recognition not available in this browser');
@@ -16,47 +17,33 @@ if (!('webkitSpeechRecognition' in window)) {
   var recognition = initializeSpeechObject();
 }
 
+ // <button id="speak-button">Speak</button>
+ //    <button id="compare-button">Compare</button>
+ //    <button id="again-button">Try Again</button>
+ //    <button id="next-button">Next</button>
+ //    <button id="previous-button">Previous</button>
+ //    <button id="start-over-button">Start Over</button>
+ //    <script src="app.js"></script>
+
 $(document).ready(function() {
   $('#speak-button').click(function(event) {
     speakButton(event);
   });
   $('#memorize-button').click(function() {
+    console.log('memorize was clicked');
     memorizeButton('\n');
   });
   $('#compare-button').click(function() {
     compareButton();
   });
+  // $('#again-button').click(function() {
+
+  // });
 });
 
 /****************************************************
 HANDLING SOURCE INPUT
 *****************************************************/
-
-function memorizeButton(delimeter) {
-  let sourceText = $('#source-text-input').val().trim();
-  let last = sourceText.length - delimeter.length;
-  if (sourceText.slice(last) === delimeter) {
-    sourceText = sourceText.slice(0, last);
-  } 
-  localStorage.setItem('source text', sourceText);
-
-  let chunkedSourceText = sourceText.split(delimeter).map(chunk => chunk.trim());
-  let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
-
-  let chunks = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
-    result.push([sourceChunk, strippedChunks[idx]]);
-    return result;
-  }, []);
-
-  localStorage.setItem('chunks', JSON.stringify(chunks));
-
-
-  console.log(chunkedSourceText);
-  console.log(strippedChunks);
-  // console.log(chunks);
-  console.log(JSON.parse(localStorage.getItem('chunks')));
-
-}
 
 function stripChunk(string) {
   string = string.toLowerCase();
@@ -71,13 +58,6 @@ function stripChunk(string) {
 /****************************************************
 COMPARING VOICE TO CHUNK
 *****************************************************/
-
-function compareButton() {
-  let voiceString = $('#final-span').text();
-  console.log(voiceString);
-  let resultStr = compareToChunk(voiceString, 0);
-  console.log(resultStr); 
-}
 
 function compareToChunk(voiceString, chunkIdx) {
   let voiceWords = voiceString.split(' ');
@@ -99,9 +79,45 @@ function compareToChunk(voiceString, chunkIdx) {
 }
 
 /****************************************************
-SPEECH RECOGNITION STUFF
+BUTTONS
 *****************************************************/
 
+// function again() {
+
+// }
+
+function compareButton() {
+  let voiceString = $('#final-span').html();
+  console.log(voiceString);
+  let resultStr = compareToChunk(voiceString, currentChunkIdx);
+  console.log(resultStr); 
+}
+
+function memorizeButton(delimeter) {
+  let sourceText = $('#source-text-input').val().trim();
+  let last = sourceText.length - delimeter.length;
+  if (sourceText.slice(last) === delimeter) {
+    sourceText = sourceText.slice(0, last);
+  } 
+  localStorage.setItem('source text', sourceText);
+
+  let chunkedSourceText = sourceText.split(delimeter).map(chunk => chunk.trim());
+  let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
+
+  let chunks = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
+    result.push([sourceChunk, strippedChunks[idx]]);
+    return result;
+  }, []);
+
+  localStorage.setItem('chunks', JSON.stringify(chunks));
+
+  currentChunkIdx = 0;
+
+  console.log(chunkedSourceText);
+  console.log(strippedChunks);
+  // console.log(chunks);
+  console.log(JSON.parse(localStorage.getItem('chunks')));
+}
 
 function speakButton(event) {
   if (recognizing) {
@@ -117,6 +133,11 @@ function speakButton(event) {
   $('#speak-button').html('Stop');
   start_timestamp = event.timeStamp;
 }
+
+
+/****************************************************
+SPEECH RECOGNITION STUFF
+*****************************************************/
 
 function initializeSpeechObject() {
   var speechObj = new webkitSpeechRecognition();

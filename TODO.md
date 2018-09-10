@@ -1,7 +1,7 @@
 # MVP
 * [x] Input field for text to memorize
 * [x] Split input text into chunks
-* [] Button to save source text and begin memorization process
+* [x] Button to save source text and begin memorization process
 * [x] Figure out API to input voice to text into text box
 * [] Input field to make edits
 * [] Check for missing words (without regard for order)

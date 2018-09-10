@@ -46,3 +46,25 @@
     border-spacing: 0;
   }
 
+textarea {
+  width: 500px;
+  height: 150px;
+}
+
+#results {
+  border: 3px solid #949599;
+  width: 500px;
+  height: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

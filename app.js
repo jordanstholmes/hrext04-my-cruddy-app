@@ -1,3 +1,4 @@
+"use strict";
 
 /****************************************************
 GLOBAL VARIABLES (refactor)
@@ -39,8 +40,17 @@ function memorizeButton(delimeter) {
   let chunkedSourceText = sourceText.split(delimeter).map(chunk => chunk.trim());
   let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
 
+  let chunksObj = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
+    result.push([sourceChunk, strippedChunks[idx]]);
+    return result;
+  }, []);
+
+  localStorage.setItem('chunksObj', chunksObj);
+
+
   console.log(chunkedSourceText);
   console.log(strippedChunks);
+  console.log(chunksObj);
 
 }
 
@@ -52,6 +62,16 @@ function stripChunk(string) {
   }).join('');
   return stripped;
 }
+
+/****************************************************
+COMPARING VOICE TO CHUNK
+*****************************************************/
+
+// function compareToChunk(voiceString, chunkIdx) {
+//   let voicWords = voiceString.split(' ');
+//   let chunkWords = 
+
+// }
 
 /****************************************************
 SPEECH RECOGNITION STUFF

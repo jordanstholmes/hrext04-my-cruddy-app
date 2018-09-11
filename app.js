@@ -3,24 +3,23 @@
 /****************************************************
 MODEL
 *****************************************************/
-let memoria = localStorage.getItem('chunks')
+let memoria = localStorage.getItem('memoria')
 if (memoria) {
   memoria = JSON.parse(memoria);
 } else {
   memoria = {
     currentChunkIdx: 0,
     sourceText: undefined,
+    originalChunks:undefined,
+    strippedChunks: undefined,
     chunks: undefined
   }
 }
 
 function memorizeButton(delimeter) {
   // let sourceText = $('#source-text-input').val().trim();
-  memoria.sourceText = $('#source-text-input').val().trim();
-  let last = memoria.sourceText.length - delimeter.length;
-  if (memoria.sourceText.slice(last) === delimeter) {
-    memoria.sourceText = memoria.sourceText.slice(0, last);
-  } 
+  let sourceText = $('#source-text-input').val(); 
+  memoria.sourceText = controller.trimSourceInput(sourceText, '\n');
   // localStorage.setItem('source text', memoria.sourceText);
 
   let chunkedSourceText = memoria.sourceText.split(delimeter).map(chunk => chunk.trim());
@@ -31,13 +30,13 @@ function memorizeButton(delimeter) {
     return result;
   }, []);
 
-  // localStorage.setItem('chunks', JSON.stringify(chunks));
   memoria.chunks = chunks;
 
   memoria.currentChunkIdx = 0;
   clearComparisonDisplay();
   clearSourceTextDisplay();
 
+  localStorage.setItem('memoria', JSON.stringify(memoria));
   displayLineLocation();
 }
 // (sourceName) {
@@ -96,7 +95,16 @@ VIEW
 /****************************************************
 CONTROLLER
 *****************************************************/
-
+var controller = {
+  trimSourceInput: function(sourceStr, delimeter) {
+    sourceStr = sourceStr.trim();
+    let last = sourceStr.length - delimeter.length;
+    if (sourceStr.slice(last) === delimeter) {
+      sourceStr = sourceStr.slice(0, last);
+    }
+    return sourceStr; 
+  }
+}
 
 /****************************************************
 HANDLING SOURCE INPUT

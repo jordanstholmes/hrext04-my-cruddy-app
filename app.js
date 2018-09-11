@@ -7,30 +7,56 @@ let memoria = localStorage.getItem('memoria')
 if (memoria) {
   memoria = JSON.parse(memoria);
 } else {
-  memoria = {
-    currentChunkIdx: 0,
-    sourceText: undefined,
-    originalChunks:undefined,
-    strippedChunks: undefined,
-    chunks: undefined
-  }
+  memoria = new Memoria();
 }
 
+function Memoria(sourceText) {
+  this.currentChunkIdx = 0;
+  this.delimeter = undefined;
+  this.sourceText = sourceText;
+  this.originalChunks = undefined;
+  this.strippedChunks = undefined;
+}
+
+Memoria.prototype.createChunks = function() {
+  this.originalChunks = this.sourceText.split(this.delimeter).map(x => x.trim());
+}
+
+Memoria.prototype.stripChunk = function(chunkStr) {
+  chunkStr = chunkStr.toLowerCase();
+  const punctuation = '.,-$?!()[]\'";:@#%/';
+  const whitespaceChars = '\n'
+  let stripped = chunkStr.split('').filter(function(elem) {
+    return !punctuation.includes(elem) && !whitespaceChars.includes(elem);
+  }).join('');
+  return stripped;
+}
+
+Memoria.prototype.createStrippedChunks = function() {
+  this.strippedChunks = this.originalChunks.map(chunk => this.stripChunk(chunk));
+}
+
+Memoria.prototype.trimSourceInput = function() {
+  let text = this.sourceText.trim();
+  let last = text.length - this.delimeter.length;
+  if (text.slice(last) === this.delimeter) {
+    text = text.slice(0, last);
+  }
+  this.sourceText = text;
+}
+
+/*
+JORDAN: you're in the middle of factoring out most of memorizeButton.
+It should just tell the model and the display what to, but not do it itself (perhaps instantiate a memoria object)??
+*/
+
 function memorizeButton(delimeter) {
-  // let sourceText = $('#source-text-input').val().trim();
-  let sourceText = $('#source-text-input').val(); 
-  memoria.sourceText = controller.trimSourceInput(sourceText, '\n');
-  // localStorage.setItem('source text', memoria.sourceText);
+  memoria.delimeter = delimeter;
+  memoria.sourceText = $('#source-text-input').val(); 
+  memoria.trimSourceInput();
 
-  let chunkedSourceText = memoria.sourceText.split(delimeter).map(chunk => chunk.trim());
-  let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
-
-  let chunks = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
-    result.push([sourceChunk, strippedChunks[idx]]);
-    return result;
-  }, []);
-
-  memoria.chunks = chunks;
+  memoria.createChunks();
+  memoria.createStrippedChunks();
 
   memoria.currentChunkIdx = 0;
   clearComparisonDisplay();
@@ -96,28 +122,7 @@ VIEW
 CONTROLLER
 *****************************************************/
 var controller = {
-  trimSourceInput: function(sourceStr, delimeter) {
-    sourceStr = sourceStr.trim();
-    let last = sourceStr.length - delimeter.length;
-    if (sourceStr.slice(last) === delimeter) {
-      sourceStr = sourceStr.slice(0, last);
-    }
-    return sourceStr; 
-  }
-}
 
-/****************************************************
-HANDLING SOURCE INPUT
-*****************************************************/
-
-function stripChunk(string) {
-  string = string.toLowerCase();
-  const punctuation = '.,-$?!()[]\'";:@#%/';
-  const whitespaceChars = '\n'
-  let stripped = string.split('').filter(function(elem) {
-    return !punctuation.includes(elem) && !whitespaceChars.includes(elem);
-  }).join('');
-  return stripped;
 }
 
 /****************************************************
@@ -126,7 +131,7 @@ COMPARING VOICE TO CHUNK
 
 function compareToChunk(voiceString, chunkIdx) {
   let voiceWords = voiceString.trim().toLowerCase().split(' ');
-  let chunkWords = memoria.chunks[chunkIdx][1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
+  let chunkWords = memoria.strippedChunks[chunkIdx].split(' ');
   let missed = chunkWords.reduce(function(acc, word) {
     if (!voiceWords.includes(word.toLowerCase())) {
       acc += '\t' +word + '\n';
@@ -151,7 +156,7 @@ function compareToChunk(voiceString, chunkIdx) {
 BUTTONS
 *****************************************************/
 function nextButton() {
-  if (memoria.chunks.length - 1 === memoria.currentChunkIdx) {
+  if (memoria.originalChunks.length - 1 === memoria.currentChunkIdx) {
     $('#error-display').html('You\'ve reached the end!');
   } else {
     clearComparisonDisplay();
@@ -183,7 +188,7 @@ function startOverButton() {
 function compareButton() {
   let voiceString = $('#final-span').html();
   compareToChunk(voiceString, memoria.currentChunkIdx);
-  let currentChunkOriginal = memoria.chunks[memoria.currentChunkIdx][0];
+  let currentChunkOriginal = memoria.originalChunks[memoria.currentChunkIdx];
   $('#original-chunk').html(currentChunkOriginal);
 }
 
@@ -289,20 +294,12 @@ function clearComparisonDisplay() {
   $('#final-span').html('');
 }
 
-// function getChunksArray(idx) {
-//   if (idx === undefined) {
-//     return JSON.parse(localStorage.getItem('chunks'));
-//   } else {
-//     return JSON.parse(localStorage.getItem('chunks'))[idx]; 
-//   }
-// }
-
 function displayLineLocation() {
   let lineNumDisplay;
-  if (memoria.chunks === undefined) {
+  if (memoria.originalChunks === undefined) {
     lineNumDisplay = '0/0';
   } else {
-    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.chunks.length).toString(); 
+    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 
   }
   $('#line-location-display').html(lineNumDisplay);
 }

@@ -125,11 +125,11 @@ function memorizeButton(delimeter) {
   memoria.createStrippedChunks();
 
   memoria.currentChunkIdx = 0;
-  clearComparisonDisplay();
-  clearSourceTextDisplay();
+  view.clearComparisonDisplay();
+  view.clearSourceTextDisplay();
 
   localStorage.setItem('memoria', JSON.stringify(memoria));
-  displayLineLocation();
+  view.displayLineLocation();
   console.log(memoria);
 }
 
@@ -150,7 +150,7 @@ if (!('webkitSpeechRecognition' in window)) {
 }
 
 $(document).ready(function() {
-  displayLineLocation();
+  view.displayLineLocation();
 
   $('#speak-button').click(function(event) {
     speakButton(event);
@@ -175,57 +175,6 @@ $(document).ready(function() {
   })
 });
 
-/****************************************************
-CONTROLLER
-*****************************************************/
-var controller = {
-  getVoiceText: function() {
-    return $('#final-span').html().trim();
-  }
-}
-
-/****************************************************
-BUTTONS
-*****************************************************/
-function nextButton() {
-  if (memoria.originalChunks.length - 1 === memoria.currentChunkIdx) {
-    $('#error-display').html('You\'ve reached the end!');
-  } else {
-    clearComparisonDisplay();
-    memoria.currentChunkIdx++;
-    displayLineLocation();
-  }
-}
-
-function previousButton() {
-  if (memoria.currentChunkIdx === 0) {
-    $('#error-display').html('You\'re already at the beginning!');
-  } else {
-    clearComparisonDisplay();
-    memoria.currentChunkIdx--;
-    displayLineLocation();
-  }
-}
-
-function againButton() {
-  clearComparisonDisplay();
-}
-
-function startOverButton() {
-  clearComparisonDisplay();
-  memoria.currentChunkIdx = 0;
-  displayLineLocation();
-} 
-
-function compareButton() {
-  memoria.compareCurrentChunk();
-  view.displayMissed(memoria.getMissedWordsStr());
-  view.displayAdded(memoria.getAddedWordsStr());
-  view.displayOriginalChunk(memoria.originalChunks[memoria.currentChunkIdx]);
-}
-
-
-
 function speakButton(event) {
   if (recognizing) {
     $('#speak-button').html('Speak');
@@ -242,6 +191,52 @@ function speakButton(event) {
 }
 
 /****************************************************
+CONTROLLER
+*****************************************************/
+var controller = {
+  getVoiceText: function() {
+    return $('#final-span').html().trim();
+  }
+}
+
+function nextButton() {
+  if (memoria.originalChunks.length - 1 === memoria.currentChunkIdx) {
+    view.displayError('You\'ve reached the end!');
+  } else {
+    view.clearComparisonDisplay();
+    memoria.currentChunkIdx++;
+    view.displayLineLocation();
+  }
+}
+
+function previousButton() {
+  if (memoria.currentChunkIdx === 0) {
+    view.displayError('You\'re already at the beginning!');
+  } else {
+    view.clearComparisonDisplay();
+    memoria.currentChunkIdx--;
+    view.displayLineLocation();
+  }
+}
+
+function againButton() {
+  view.clearComparisonDisplay();
+}
+
+function startOverButton() {
+  view.clearComparisonDisplay();
+  memoria.currentChunkIdx = 0;
+  view.displayLineLocation();
+} 
+
+function compareButton() {
+  memoria.compareCurrentChunk();
+  view.displayMissed(memoria.getMissedWordsStr());
+  view.displayAdded(memoria.getAddedWordsStr());
+  view.displayOriginalChunk(memoria.originalChunks[memoria.currentChunkIdx]);
+}
+
+/****************************************************
 VIEW
 *****************************************************/
 let view = {
@@ -253,30 +248,29 @@ let view = {
   },
   displayOriginalChunk: function(str) {
     $('#original-chunk').html(str);
+  },
+  displayError: function(str) {
+    $('#error-display').html(str)
+  },
+  clearComparisonDisplay: function() {
+    $('#original-chunk').html('');
+    $('#comparison-missed').html('');
+    $('#comparison-added').html('');
+    $('#error-display').html('');
+    $('#final-span').html('');
+  },
+  clearSourceTextDisplay: function() {
+    $('#source-text-input').val('');
+  },
+  displayLineLocation: function() {
+    let lineNumDisplay;
+    if (memoria.originalChunks.length === 0) {
+      lineNumDisplay = '0/0';
+    } else {
+      lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 
+    }
+    $('#line-location-display').html(lineNumDisplay);
   }
-}
-
-
-function clearComparisonDisplay() {
-  $('#original-chunk').html('');
-  $('#comparison-missed').html('');
-  $('#comparison-added').html('');
-  $('#error-display').html('');
-  $('#final-span').html('');
-}
-
-function displayLineLocation() {
-  let lineNumDisplay;
-  if (memoria.originalChunks.length === 0) {
-    lineNumDisplay = '0/0';
-  } else {
-    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 
-  }
-  $('#line-location-display').html(lineNumDisplay);
-}
-
-function clearSourceTextDisplay() {
-  $('#source-text-input').val('');
 }
 
 

@@ -45,6 +45,33 @@ Memoria.prototype.trimSourceInput = function() {
   this.sourceText = text;
 }
 
+Memoria.prototype.compareToCurrentChunk = function(voiceString) {
+  //JORDAN: split the 'compareToChunk' function into smaller pieces and then add to prototype
+}
+
+function compareToChunk(voiceString, chunkIdx) {
+  let voiceWords = voiceString.trim().toLowerCase().split(' ');
+  let chunkWords = memoria.strippedChunks[chunkIdx].split(' ');
+  let missed = chunkWords.reduce(function(acc, word) {
+    if (!voiceWords.includes(word.toLowerCase())) {
+      acc += '\t' +word + '\n';
+    }
+    return acc;
+  }, '');
+  let missedStr = 'Missed:\n' + (missed || 'none!');
+  $('#comparison-missed').html(missedStr);
+
+  let added = voiceWords.reduce(function(acc, word) {
+    if (!chunkWords.includes(word.toLowerCase())) {
+      acc += '\t' + word + '\n';
+    }
+    return acc;
+  }, '');
+  let addedStr = 'Added:\n' + (added || 'none!');
+  $('#comparison-added').html(addedStr);
+
+}
+
 /*
 JORDAN: you're in the middle of factoring out most of memorizeButton.
 It should just tell the model and the display what to, but not do it itself (perhaps instantiate a memoria object)??
@@ -65,11 +92,6 @@ function memorizeButton(delimeter) {
   localStorage.setItem('memoria', JSON.stringify(memoria));
   displayLineLocation();
 }
-// (sourceName) {
-//   this.sourceName = sourceName;
-//   this.memoria.currentChunkIdx = 0;
-//   this.sourceText = undefined;
-// }
 
 /****************************************************
 GLOBAL VARIABLES (refactor)
@@ -122,33 +144,6 @@ VIEW
 CONTROLLER
 *****************************************************/
 var controller = {
-
-}
-
-/****************************************************
-COMPARING VOICE TO CHUNK
-*****************************************************/
-
-function compareToChunk(voiceString, chunkIdx) {
-  let voiceWords = voiceString.trim().toLowerCase().split(' ');
-  let chunkWords = memoria.strippedChunks[chunkIdx].split(' ');
-  let missed = chunkWords.reduce(function(acc, word) {
-    if (!voiceWords.includes(word.toLowerCase())) {
-      acc += '\t' +word + '\n';
-    }
-    return acc;
-  }, '');
-  let missedStr = 'Missed:\n' + (missed || 'none!');
-  $('#comparison-missed').html(missedStr);
-
-  let added = voiceWords.reduce(function(acc, word) {
-    if (!chunkWords.includes(word.toLowerCase())) {
-      acc += '\t' + word + '\n';
-    }
-    return acc;
-  }, '');
-  let addedStr = 'Added:\n' + (added || 'none!');
-  $('#comparison-added').html(addedStr);
 
 }
 

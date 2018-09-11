@@ -9,8 +9,36 @@ if (memoria) {
 } else {
   memoria = {
     currentChunkIdx: 0,
-    sourceText: undefined
+    sourceText: undefined,
+    chunks: undefined
   }
+}
+
+function memorizeButton(delimeter) {
+  // let sourceText = $('#source-text-input').val().trim();
+  memoria.sourceText = $('#source-text-input').val().trim();
+  let last = memoria.sourceText.length - delimeter.length;
+  if (memoria.sourceText.slice(last) === delimeter) {
+    memoria.sourceText = memoria.sourceText.slice(0, last);
+  } 
+  // localStorage.setItem('source text', memoria.sourceText);
+
+  let chunkedSourceText = memoria.sourceText.split(delimeter).map(chunk => chunk.trim());
+  let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
+
+  let chunks = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
+    result.push([sourceChunk, strippedChunks[idx]]);
+    return result;
+  }, []);
+
+  // localStorage.setItem('chunks', JSON.stringify(chunks));
+  memoria.chunks = chunks;
+
+  memoria.currentChunkIdx = 0;
+  clearComparisonDisplay();
+  clearSourceTextDisplay();
+
+  displayLineLocation();
 }
 // (sourceName) {
 //   this.sourceName = sourceName;
@@ -90,7 +118,7 @@ COMPARING VOICE TO CHUNK
 
 function compareToChunk(voiceString, chunkIdx) {
   let voiceWords = voiceString.trim().toLowerCase().split(' ');
-  let chunkWords = getChunksArray(chunkIdx)[1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
+  let chunkWords = memoria.chunks[chunkIdx][1].split(' '); // The chunks array has 2-element nested arrays, the element at index 1 has the stripped version
   let missed = chunkWords.reduce(function(acc, word) {
     if (!voiceWords.includes(word.toLowerCase())) {
       acc += '\t' +word + '\n';
@@ -115,7 +143,7 @@ function compareToChunk(voiceString, chunkIdx) {
 BUTTONS
 *****************************************************/
 function nextButton() {
-  if (getChunksArray().length - 1 === memoria.currentChunkIdx) {
+  if (memoria.chunks.length - 1 === memoria.currentChunkIdx) {
     $('#error-display').html('You\'ve reached the end!');
   } else {
     clearComparisonDisplay();
@@ -147,34 +175,11 @@ function startOverButton() {
 function compareButton() {
   let voiceString = $('#final-span').html();
   compareToChunk(voiceString, memoria.currentChunkIdx);
-  let currentChunkOriginal = getChunksArray(memoria.currentChunkIdx)[0];
+  let currentChunkOriginal = memoria.chunks[memoria.currentChunkIdx][0];
   $('#original-chunk').html(currentChunkOriginal);
 }
 
-function memorizeButton(delimeter) {
-  let sourceText = $('#source-text-input').val().trim();
-  let last = sourceText.length - delimeter.length;
-  if (sourceText.slice(last) === delimeter) {
-    sourceText = sourceText.slice(0, last);
-  } 
-  localStorage.setItem('source text', sourceText);
 
-  let chunkedSourceText = sourceText.split(delimeter).map(chunk => chunk.trim());
-  let strippedChunks = chunkedSourceText.map(chunk => stripChunk(chunk));
-
-  let chunks = chunkedSourceText.reduce(function(result, sourceChunk, idx) {
-    result.push([sourceChunk, strippedChunks[idx]]);
-    return result;
-  }, []);
-
-  localStorage.setItem('chunks', JSON.stringify(chunks));
-
-  memoria.currentChunkIdx = 0;
-  clearComparisonDisplay();
-  clearSourceTextDisplay();
-
-  displayLineLocation();
-}
 
 function speakButton(event) {
   if (recognizing) {
@@ -276,20 +281,20 @@ function clearComparisonDisplay() {
   $('#final-span').html('');
 }
 
-function getChunksArray(idx) {
-  if (idx === undefined) {
-    return JSON.parse(localStorage.getItem('chunks'));
-  } else {
-    return JSON.parse(localStorage.getItem('chunks'))[idx]; 
-  }
-}
+// function getChunksArray(idx) {
+//   if (idx === undefined) {
+//     return JSON.parse(localStorage.getItem('chunks'));
+//   } else {
+//     return JSON.parse(localStorage.getItem('chunks'))[idx]; 
+//   }
+// }
 
 function displayLineLocation() {
   let lineNumDisplay;
-  if (localStorage.getItem('chunks') === null) {
+  if (memoria.chunks === undefined) {
     lineNumDisplay = '0/0';
   } else {
-    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (getChunksArray().length).toString(); 
+    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.chunks.length).toString(); 
   }
   $('#line-location-display').html(lineNumDisplay);
 }

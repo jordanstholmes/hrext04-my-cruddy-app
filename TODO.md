@@ -16,6 +16,13 @@
 * [x] Button to start from the beginning of memorization process
 * [x] Button to compare voice-to-text vs. stripped chunk
 
+* [] Make line location clickable/editable
+* [] Make buttons have animation https://codemyui.com/pure-css-cartoon-style-angled-button/
+* [] Make landing page
+* [] Animate recording button
+* [] Animate transitions between pages
+
+
 * [] Add naming memorization sources
 * [] Add option to save and select several memorization things
 * [] Refactor for Model View Controller 

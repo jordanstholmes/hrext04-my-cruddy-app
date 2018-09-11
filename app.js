@@ -1,6 +1,24 @@
 "use strict";
 
 /****************************************************
+MODEL
+*****************************************************/
+let memoria = localStorage.getItem('chunks')
+if (memoria) {
+  memoria = JSON.parse(memoria);
+} else {
+  memoria = {
+    currentChunkIdx: 0,
+    sourceText: undefined
+  }
+}
+// (sourceName) {
+//   this.sourceName = sourceName;
+//   this.memoria.currentChunkIdx = 0;
+//   this.sourceText = undefined;
+// }
+
+/****************************************************
 GLOBAL VARIABLES (refactor)
 *****************************************************/
 
@@ -9,18 +27,12 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
-var currentChunkIdx = 0;
 
 if (!('webkitSpeechRecognition' in window)) {
   console.log('speech recognition not available in this browser');
 } else {
   var recognition = initializeSpeechObject();
 }
-
- //    <button id="next-button">Next</button>
- //    <button id="previous-button">Previous</button>
- //    <button id="beginning-button">Start Over</button>
- //    <script src="app.js"></script>
 
 $(document).ready(function() {
   displayLineLocation();
@@ -29,7 +41,6 @@ $(document).ready(function() {
     speakButton(event);
   });
   $('#memorize-button').click(function() {
-    console.log('memorize was clicked');
     memorizeButton('\n');
   });
   $('#compare-button').click(function() {
@@ -48,6 +59,16 @@ $(document).ready(function() {
     startOverButton();
   })
 });
+
+/****************************************************
+VIEW
+*****************************************************/
+
+
+/****************************************************
+CONTROLLER
+*****************************************************/
+
 
 /****************************************************
 HANDLING SOURCE INPUT
@@ -88,28 +109,27 @@ function compareToChunk(voiceString, chunkIdx) {
   let addedStr = 'Added:\n' + (added || 'none!');
   $('#comparison-added').html(addedStr);
 
-  // return 'Missed:\n' + (missed || 'none!')+ '\n' + 'Added:\n' + (added || 'none!');
 }
 
 /****************************************************
 BUTTONS
 *****************************************************/
 function nextButton() {
-  if (getChunksArray().length - 1 === currentChunkIdx) {
+  if (getChunksArray().length - 1 === memoria.currentChunkIdx) {
     $('#error-display').html('You\'ve reached the end!');
   } else {
     clearComparisonDisplay();
-    currentChunkIdx++;
+    memoria.currentChunkIdx++;
     displayLineLocation();
   }
 }
 
 function previousButton() {
-  if (currentChunkIdx === 0) {
+  if (memoria.currentChunkIdx === 0) {
     $('#error-display').html('You\'re already at the beginning!');
   } else {
     clearComparisonDisplay();
-    currentChunkIdx--;
+    memoria.currentChunkIdx--;
     displayLineLocation();
   }
 }
@@ -120,19 +140,15 @@ function againButton() {
 
 function startOverButton() {
   clearComparisonDisplay();
-  currentChunkIdx = 0;
+  memoria.currentChunkIdx = 0;
   displayLineLocation();
 } 
 
 function compareButton() {
   let voiceString = $('#final-span').html();
-  console.log(voiceString);
-  // let resultStr = compareToChunk(voiceString, currentChunkIdx);
-  compareToChunk(voiceString, currentChunkIdx);
-  let currentChunkOriginal = getChunksArray(currentChunkIdx)[0];
+  compareToChunk(voiceString, memoria.currentChunkIdx);
+  let currentChunkOriginal = getChunksArray(memoria.currentChunkIdx)[0];
   $('#original-chunk').html(currentChunkOriginal);
-  // $('#comparison-details').html(resultStr);
-  // console.log(resultStr); 
 }
 
 function memorizeButton(delimeter) {
@@ -153,16 +169,11 @@ function memorizeButton(delimeter) {
 
   localStorage.setItem('chunks', JSON.stringify(chunks));
 
-  currentChunkIdx = 0;
+  memoria.currentChunkIdx = 0;
   clearComparisonDisplay();
   clearSourceTextDisplay();
 
   displayLineLocation();
-
-  console.log(chunkedSourceText);
-  console.log(strippedChunks);
-  // console.log(chunks);
-  console.log(getChunksArray());
 }
 
 function speakButton(event) {
@@ -202,12 +213,10 @@ function initializeSpeechObject() {
 function addErrorBehavior(speechObj) {
   speechObj.onerror = function(event) {
     if (event.error == 'no-speech') {
-      // start_img.src = 'mic.gif';
       console.log('No speech was detected.');
       ignore_onend = true;
     }
     if (event.error == 'audio-capture') {
-      // start_img.src = 'mic.gif';
       console.log('No microphone was found.');
       ignore_onend = true;
     }
@@ -244,7 +253,6 @@ function addEndBehavior(speechObj) {
       return;
     }
     if (!final_transcript) {
-      // showInfo('info_start');
       return;
     }
   };
@@ -259,10 +267,7 @@ function addStartBehavior(speechObj) {
 /****************************************************
 HELPER FUNCTIONS
 *****************************************************/
-// <div id="original-chunk"></div>
-//       <div id="comparison-details">
-//         <div id="comparison-missed"></div>
-//         <div id="comparison-added"></div>
+
 function clearComparisonDisplay() {
   $('#original-chunk').html('');
   $('#comparison-missed').html('');
@@ -284,7 +289,7 @@ function displayLineLocation() {
   if (localStorage.getItem('chunks') === null) {
     lineNumDisplay = '0/0';
   } else {
-    lineNumDisplay = (currentChunkIdx + 1).toString() + '/' + (getChunksArray().length).toString(); 
+    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (getChunksArray().length).toString(); 
   }
   $('#line-location-display').html(lineNumDisplay);
 }

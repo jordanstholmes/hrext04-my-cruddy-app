@@ -3,6 +3,14 @@
 // JORDAN: at some point you may want to make some of the object properties getters so that you don't get stale data
 // Next factor all the DOM stuff to DISPLAY and make the CONTROLLER the intermediary between DISPLAY and MODEL
 
+let memoria = localStorage.getItem('memoria')
+if (memoria) {
+  memoria = JSON.parse(memoria);
+  memoria.__proto__ = Memoria.prototype; // JSON.stringify, aparently does not preserve any "not-owned" properties
+} else {
+  memoria = new Memoria();
+}
+
 /****************************************************
 MEMORIA CLASS
 *****************************************************/
@@ -99,22 +107,8 @@ Memoria.prototype.compareCurrentChunk = function(voiceString) {
   this.createChunkWords();
   this.createMissedWords();
   this.createAddedWords();
-  $('#comparison-missed').html(memoria.getMissedWordsStr()); //should happen in display
-  $('#comparison-added').html(memoria.getAddedWordsStr()); // should happen in display
   //JORDAN: split the 'compareToChunk' function into smaller pieces and then add to prototype
 }
-
-
-
-let memoria = localStorage.getItem('memoria')
-if (memoria) {
-  memoria = JSON.parse(memoria);
-  memoria.__proto__ = Memoria.prototype; // JSON.stringify, aparently does not preserve any "not-owned" properties
-} else {
-  memoria = new Memoria();
-}
-
-
 
 
 /*
@@ -182,11 +176,6 @@ $(document).ready(function() {
 });
 
 /****************************************************
-VIEW
-*****************************************************/
-
-
-/****************************************************
 CONTROLLER
 *****************************************************/
 var controller = {
@@ -230,7 +219,9 @@ function startOverButton() {
 
 function compareButton() {
   memoria.compareCurrentChunk();
-  $('#original-chunk').html(memoria.originalChunks[memoria.currentChunkIdx]);
+  view.displayMissed(memoria.getMissedWordsStr());
+  view.displayAdded(memoria.getAddedWordsStr());
+  view.displayOriginalChunk(memoria.originalChunks[memoria.currentChunkIdx]);
 }
 
 
@@ -248,6 +239,44 @@ function speakButton(event) {
   $('#interim-span').html('');
   $('#speak-button').html('Stop');
   start_timestamp = event.timeStamp;
+}
+
+/****************************************************
+VIEW
+*****************************************************/
+let view = {
+  displayMissed: function(str) {
+    $('#comparison-missed').html(str);
+  },
+  displayAdded: function(str) {
+    $('#comparison-added').html(str);
+  },
+  displayOriginalChunk: function(str) {
+    $('#original-chunk').html(str);
+  }
+}
+
+
+function clearComparisonDisplay() {
+  $('#original-chunk').html('');
+  $('#comparison-missed').html('');
+  $('#comparison-added').html('');
+  $('#error-display').html('');
+  $('#final-span').html('');
+}
+
+function displayLineLocation() {
+  let lineNumDisplay;
+  if (memoria.originalChunks.length === 0) {
+    lineNumDisplay = '0/0';
+  } else {
+    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 
+  }
+  $('#line-location-display').html(lineNumDisplay);
+}
+
+function clearSourceTextDisplay() {
+  $('#source-text-input').val('');
 }
 
 
@@ -322,30 +351,3 @@ function addStartBehavior(speechObj) {
     recognizing = true;
   };
 }
-
-/****************************************************
-HELPER FUNCTIONS
-*****************************************************/
-
-function clearComparisonDisplay() {
-  $('#original-chunk').html('');
-  $('#comparison-missed').html('');
-  $('#comparison-added').html('');
-  $('#error-display').html('');
-  $('#final-span').html('');
-}
-
-function displayLineLocation() {
-  let lineNumDisplay;
-  if (memoria.originalChunks.length === 0) {
-    lineNumDisplay = '0/0';
-  } else {
-    lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 
-  }
-  $('#line-location-display').html(lineNumDisplay);
-}
-
-function clearSourceTextDisplay() {
-  $('#source-text-input').val('');
-}
-

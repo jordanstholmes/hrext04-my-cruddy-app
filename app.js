@@ -1,39 +1,40 @@
 "use strict";
 
-/****************************************************
-MODEL
-*****************************************************/
-let memoria = localStorage.getItem('memoria')
-if (memoria) {
-  memoria = JSON.parse(memoria);
-} else {
-  memoria = new Memoria();
-}
+// JORDAN: at some point you may want to make some of the object properties getters so that you don't get stale data
+// Next factor all the DOM stuff to DISPLAY and make the CONTROLLER the intermediary between DISPLAY and MODEL
 
+/****************************************************
+MEMORIA CLASS
+*****************************************************/
 function Memoria(sourceText) {
   this.currentChunkIdx = 0;
   this.delimeter = undefined;
   this.sourceText = sourceText;
-  this.originalChunks = undefined;
-  this.strippedChunks = undefined;
+  this.originalChunks = [];
+  this.strippedChunks = [];
+  this.chunkWords = [];
+  this.chunkWordsLowerCase = [];
+  this.voiceWords = [];
+  this.voiceWordsLowerCase = [];
+  this.missedWords = [];
+  this.addedWords = [];
 }
 
 Memoria.prototype.createChunks = function() {
   this.originalChunks = this.sourceText.split(this.delimeter).map(x => x.trim());
 }
 
-Memoria.prototype.stripChunk = function(chunkStr) {
-  chunkStr = chunkStr.toLowerCase();
+Memoria.prototype.stripPunctuationAndNewlines = function(str) {
   const punctuation = '.,-$?!()[]\'";:@#%/';
   const whitespaceChars = '\n'
-  let stripped = chunkStr.split('').filter(function(elem) {
+  let stripped = str.split('').filter(function(elem) {
     return !punctuation.includes(elem) && !whitespaceChars.includes(elem);
   }).join('');
   return stripped;
 }
 
 Memoria.prototype.createStrippedChunks = function() {
-  this.strippedChunks = this.originalChunks.map(chunk => this.stripChunk(chunk));
+  this.strippedChunks = this.originalChunks.map(chunk => this.stripPunctuationAndNewlines(chunk));
 }
 
 Memoria.prototype.trimSourceInput = function() {
@@ -45,32 +46,76 @@ Memoria.prototype.trimSourceInput = function() {
   this.sourceText = text;
 }
 
-Memoria.prototype.compareToCurrentChunk = function(voiceString) {
+Memoria.prototype.createChunkWords = function() {
+  this.chunkWords = this.strippedChunks[this.currentChunkIdx].split(' ');
+  this.chunkWordsLowerCase = this.chunkWords.map(word => word.toLowerCase());
+}
+
+Memoria.prototype.createVoiceWords = function() {
+  let voiceText = controller.getVoiceText();
+  voiceText = memoria.stripPunctuationAndNewlines(voiceText);
+  let lowerCaseVoiceText = voiceText.toLowerCase();
+
+  this.voiceWords = voiceText ? voiceText.split(' ') : [];
+  this.voiceWordsLowerCase = lowerCaseVoiceText ? lowerCaseVoiceText.split(' ') : [];
+}
+
+Memoria.prototype.createMissedWords = function() {
+  this.missedWords = _.reduce(this.chunkWordsLowerCase, function(acc, word, index) {
+    if (!this.voiceWordsLowerCase.includes(word)) {
+      acc.push(this.chunkWords[index]);
+    }
+    return acc;
+  }, [], memoria);
+}
+
+Memoria.prototype.createAddedWords = function() {
+  this.addedWords = _.reduce(this.voiceWordsLowerCase, function(acc, word, index) {
+    if (!this.chunkWordsLowerCase.includes(word)) {
+      acc.push(this.voiceWords[index]);
+    }
+    return acc;
+  }, [], memoria);
+}
+
+Memoria.prototype.getMissedWordsStr = function() {
+  if (this.missedWords.length === 0) {
+    return 'Missed: none!';
+  } else {
+    return 'Missed: ' + this.missedWords.join(' ');
+  }
+}
+
+Memoria.prototype.getAddedWordsStr = function() {
+  if (this.addedWords.length === 0) {
+    return 'Added: none!';
+  } else {
+    return 'Added: ' + this.addedWords.join(' ');
+  }
+}
+
+Memoria.prototype.compareCurrentChunk = function(voiceString) {
+  this.createVoiceWords();
+  this.createChunkWords();
+  this.createMissedWords();
+  this.createAddedWords();
+  $('#comparison-missed').html(memoria.getMissedWordsStr()); //should happen in display
+  $('#comparison-added').html(memoria.getAddedWordsStr()); // should happen in display
   //JORDAN: split the 'compareToChunk' function into smaller pieces and then add to prototype
 }
 
-function compareToChunk(voiceString, chunkIdx) {
-  let voiceWords = voiceString.trim().toLowerCase().split(' ');
-  let chunkWords = memoria.strippedChunks[chunkIdx].split(' ');
-  let missed = chunkWords.reduce(function(acc, word) {
-    if (!voiceWords.includes(word.toLowerCase())) {
-      acc += '\t' +word + '\n';
-    }
-    return acc;
-  }, '');
-  let missedStr = 'Missed:\n' + (missed || 'none!');
-  $('#comparison-missed').html(missedStr);
 
-  let added = voiceWords.reduce(function(acc, word) {
-    if (!chunkWords.includes(word.toLowerCase())) {
-      acc += '\t' + word + '\n';
-    }
-    return acc;
-  }, '');
-  let addedStr = 'Added:\n' + (added || 'none!');
-  $('#comparison-added').html(addedStr);
 
+let memoria = localStorage.getItem('memoria')
+if (memoria) {
+  memoria = JSON.parse(memoria);
+  memoria.__proto__ = Memoria.prototype; // JSON.stringify, aparently does not preserve any "not-owned" properties
+} else {
+  memoria = new Memoria();
 }
+
+
+
 
 /*
 JORDAN: you're in the middle of factoring out most of memorizeButton.
@@ -78,7 +123,7 @@ It should just tell the model and the display what to, but not do it itself (per
 */
 
 function memorizeButton(delimeter) {
-  memoria.delimeter = delimeter;
+  memoria.delimeter = '\n';
   memoria.sourceText = $('#source-text-input').val(); 
   memoria.trimSourceInput();
 
@@ -91,6 +136,7 @@ function memorizeButton(delimeter) {
 
   localStorage.setItem('memoria', JSON.stringify(memoria));
   displayLineLocation();
+  console.log(memoria);
 }
 
 /****************************************************
@@ -144,7 +190,9 @@ VIEW
 CONTROLLER
 *****************************************************/
 var controller = {
-
+  getVoiceText: function() {
+    return $('#final-span').html().trim();
+  }
 }
 
 /****************************************************
@@ -181,10 +229,8 @@ function startOverButton() {
 } 
 
 function compareButton() {
-  let voiceString = $('#final-span').html();
-  compareToChunk(voiceString, memoria.currentChunkIdx);
-  let currentChunkOriginal = memoria.originalChunks[memoria.currentChunkIdx];
-  $('#original-chunk').html(currentChunkOriginal);
+  memoria.compareCurrentChunk();
+  $('#original-chunk').html(memoria.originalChunks[memoria.currentChunkIdx]);
 }
 
 
@@ -291,7 +337,7 @@ function clearComparisonDisplay() {
 
 function displayLineLocation() {
   let lineNumDisplay;
-  if (memoria.originalChunks === undefined) {
+  if (memoria.originalChunks.length === 0) {
     lineNumDisplay = '0/0';
   } else {
     lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 

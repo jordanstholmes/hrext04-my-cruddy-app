@@ -20,14 +20,33 @@
 <!-- LEFT SECTION -->
       <section id='left'>
 
-        <header>
+        <div class='logo'>
           <h1 class='title'>Memoria</h1>
           <img src="assets/white_book_icon.png" style="width:70px;height:70px;">
-        </header>
+        </div>
 
         <section class='answer-area'>
-          <div class='answer-box'>
-          
+          <div class='memory-box'>
+
+            <header class='memory-header'> 
+              <h3 class='memory-title'>Title Here (clickable)</h3>
+              <h4 class='memory-author'>by Author here</h4>
+            </header>
+
+            <nav class='memory-nav'>
+              <div id='previous-button' class='round-button'>&lt&lt</div>
+              <div id='line-location-display'>1/5</div>
+              <div id='next-button' class='round-button'>&gt&gt</div>
+            </nav>
+
+            <!-- <div id='voice-text-display-container'> -->
+            <div id='voice-text-input-box'>
+              <img id='mic' src='assets/mic.png' style='width:40px;height:40px'>
+              <span contenteditable="true" id="final-span">What's the next line (press enter to compare)?</span>
+              <span id="interim-span"></span>
+            </div>
+            <!-- </div> -->
+
           </div>
         </section>
 
@@ -62,8 +81,8 @@
       <section id='right'>
         
       </section>
-
-      <script src="app.js"></script>
     </div>
+    <script src="app.js"></script>
+    <div class='bottom-border'></div>
   </body>
 </html>

@@ -21,6 +21,7 @@
 * [] Make landing page
 * [] Animate recording button
 * [] Animate transitions between pages
+* [] Make sure background loads before page displays
 
 
 * [] Add naming memorization sources

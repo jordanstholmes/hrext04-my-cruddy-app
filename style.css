@@ -65,15 +65,18 @@ JORDAN CSS
 
 html {
   height: 100%;
+  /*filter: expression(document.execCommand("BackgroundImageCache", false, true));*/  
 }
 
 body {
   height: 100%;
+  font: 18px Arial, sans-serif;
+  color: white;
 }
 
 .background {
   background-image: url("assets/abstractbackground.jpg");
-  height: 100%;
+  height: 95%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -92,13 +95,20 @@ body {
   float: right;
 }
 
-header {
+.logo {
   /*display: table-row;*/
   display: flex;
   /*margin: 20px;*/
   height: 20%;
   align-items: center;
   padding: 20px;
+}
+
+
+
+.bottom-border {
+  height: 5%;
+  background-color: #FFC222;
 }
 
 .answer-area{
@@ -108,7 +118,7 @@ header {
   /*display: table-row;*/
 }
 
-.answer-box {
+.memory-box {
   background: linear-gradient(#562063, #A744BA);
   width: 85%;
   height: 400px;
@@ -116,10 +126,15 @@ header {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-textarea {
+.memory-header {
+  padding: 20px 20px;
+}
+
+
+/*textarea {
   width: 500px;
   height: 150px;
-}
+}*/
 
 h1 {
   /*display: table-row;*/
@@ -127,7 +142,45 @@ h1 {
   color: white; 
 }
 
-#voice-text-display {
+h3 {
+  font-size: 20px;
+  font-family: Arial Narrow, sans-serif;
+  color: rgba(255, 255, 255, .8);
+}
+
+h4 {
+  font-family: Arial Narrow, sans-serif;
+  color: rgba(255, 255, 255, .6);
+  margin: 5px 0 0 15px;
+}
+
+.round-button {
+  /*display: inline-block;*/
+  display: flex;
+  align-items: center;
+  padding: 5px 40px;
+  border: 3px solid #FFC222;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.memory-nav {
+  display: flex;
+  justify-content: center;
+}
+
+#voice-text-input-box {
+  background-color: rgba(255, 255, 255, .8);
+  width: 90%;
+  margin: 25px auto;
+  padding: 15px;
+  height: 200px;
+}
+
+
+
+/*#voice-text-display {
   border: 3px solid #949599;
   width: 500px;
   height: 50px;
@@ -141,7 +194,23 @@ h1 {
 
 #error-display {
   
+}*/
+
+#line-location-display {
+  font: 40px Arial Black, sans-serif;
+  color: white;
+  margin: 0 40px; 
 }
+
+#mic {
+  float: right;
+}
+
+#final-span {
+  color: rgba(0, 0, 0, .8);
+}
+
+
 
 
 

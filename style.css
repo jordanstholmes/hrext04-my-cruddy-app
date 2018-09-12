@@ -74,6 +74,10 @@ body {
   color: white;
 }
 
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}
+
 .background {
   background-image: url("assets/abstractbackground.jpg");
   height: 95%;
@@ -149,7 +153,7 @@ h1 {
 h2 {
   font: 35px Arial Black, sans-serif;
   color: white;
-  /*opacity: 0;*/
+  opacity: 0;
 }
 
 h3 {
@@ -233,6 +237,7 @@ h4 {
 
 .voice-span {
   color: rgba(0, 0, 0, .8);
+  margin: 1px;
 }
 
 .comparison-details {

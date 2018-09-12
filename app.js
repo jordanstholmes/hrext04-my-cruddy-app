@@ -32,7 +32,9 @@ Memoria.prototype.createChunks = function() {
   this.originalChunks = this.sourceText.split(this.delimeter).map(x => x.trim());
 }
 
-Memoria.prototype.stripPunctuationAndNewlines = function(str) {
+Memoria.prototype.stripPunctuationAndWhiteSpace = function(str) {
+  str = str.trim();
+  str = str.split('&nbsp').join(''); // I have a space start in final-span so that it formats correctly. This gets rid of it for parsing.
   const punctuation = '.,-$?!()[]\'";:@#%/';
   const whitespaceChars = '\n'
   let stripped = str.split('').filter(function(elem) {
@@ -42,7 +44,7 @@ Memoria.prototype.stripPunctuationAndNewlines = function(str) {
 }
 
 Memoria.prototype.createStrippedChunks = function() {
-  this.strippedChunks = this.originalChunks.map(chunk => this.stripPunctuationAndNewlines(chunk));
+  this.strippedChunks = this.originalChunks.map(chunk => this.stripPunctuationAndWhiteSpace(chunk));
 }
 
 Memoria.prototype.trimSourceInput = function() {
@@ -61,11 +63,12 @@ Memoria.prototype.createChunkWords = function() {
 
 Memoria.prototype.createVoiceWords = function() {
   let voiceText = controller.getVoiceText();
-  voiceText = memoria.stripPunctuationAndNewlines(voiceText);
-  let lowerCaseVoiceText = voiceText.toLowerCase();
+  voiceText = memoria.stripPunctuationAndWhiteSpace(voiceText);
+  let lowerCaseVoiceText = voiceText.toLowerCase(); 
 
-  this.voiceWords = voiceText ? voiceText.split(' ') : [];
-  this.voiceWordsLowerCase = lowerCaseVoiceText ? lowerCaseVoiceText.split(' ') : [];
+  this.voiceWords = voiceText ? voiceText.split(' ').filter(x => x.length !== 0) : [];
+  this.voiceWordsLowerCase = lowerCaseVoiceText ? lowerCaseVoiceText.split(' ').filter(x => x.length !== 0) : [];
+
 }
 
 Memoria.prototype.createMissedWords = function() {
@@ -151,6 +154,8 @@ if (!('webkitSpeechRecognition' in window)) {
 
 $(document).ready(function() {
   view.displayLineLocation();
+  // $("#final-span").focus();
+  view.focusVoiceSpan();
 
   $('#mic').click(function(event) {
     speakButton(event);
@@ -159,12 +164,33 @@ $(document).ready(function() {
     memorizeButton('\n');
   });
 
-  $("html").keyup(function(event) {
-    if (event.keyCode === 13) {
-      // console.log(event);
-        compareButton();
-    }
+  $('#voice-text-input-box').click(function() {
+    view.focusVoiceSpan();
   });
+
+  // $("#final-span").keyup(function(event) {
+  //   if (event.keyCode === 13) {
+  //     // console.log(event);
+  //     compareButton();
+  //     console.log('enter pressed');
+  //   }
+  // });
+
+    $("#final-span").on('keydown', function(event) {
+      if (event.which === 13) {
+        event.preventDefault();
+        // console.log(event);
+
+        compareButton();
+      }
+    });
+
+  // $("html").keyup(function(event) {
+  //   if (event.keyCode === 32) {
+  //     // console.log(event);
+  //       speakButton(event);
+  //   }
+  // });
 
   // $('#compare-button').click(function() {
   //   compareButton();
@@ -183,21 +209,6 @@ $(document).ready(function() {
   })
 });
 
-function speakButton(event) {
-  if (recognizing) {
-    $('#speak-button').html('Speak');
-    recognition.stop();
-    return;
-  }
-  final_transcript = '';
-  recognition.start();
-  ignore_onend = false;
-  $('#final-span').html('');
-  $('#interim-span').html('');
-  $('#speak-button').html('Stop');
-  start_timestamp = event.timeStamp;
-}
-
 /****************************************************
 CONTROLLER
 *****************************************************/
@@ -207,6 +218,23 @@ var controller = {
   }
 }
 
+function speakButton(event) {
+  if (recognizing) {
+    // view.stopPulse('#mic');
+    recognition.stop();
+    return;
+  }
+
+  // view.startPulse('#mic');
+  final_transcript = '';
+  recognition.start();
+  ignore_onend = false;
+  $('#final-span').html('');
+  $('#interim-span').html('');
+  $('#speak-button').html('Stop');
+  start_timestamp = event.timeStamp;
+}
+
 function nextButton() {
   if (memoria.originalChunks.length - 1 === memoria.currentChunkIdx) {
     view.displayError('You\'ve reached the end!');
@@ -214,6 +242,7 @@ function nextButton() {
     view.clearComparisonDisplay();
     memoria.currentChunkIdx++;
     view.displayLineLocation();
+    view.focusVoiceSpan();
   }
 }
 
@@ -224,24 +253,29 @@ function previousButton() {
     view.clearComparisonDisplay();
     memoria.currentChunkIdx--;
     view.displayLineLocation();
+    view.focusVoiceSpan();
   }
 }
 
 function againButton() {
   view.clearComparisonDisplay();
+  view.focusVoiceSpan();
 }
 
 function startOverButton() {
   view.clearComparisonDisplay();
   memoria.currentChunkIdx = 0;
   view.displayLineLocation();
+  view.focusVoiceSpan();
 } 
 
 function compareButton() {
   memoria.compareCurrentChunk();
+  console.log(memoria.voiceWords);
   view.displayMissed(memoria.getMissedWordsStr());
   view.displayAdded(memoria.getAddedWordsStr());
   view.displayOriginalChunk(memoria.originalChunks[memoria.currentChunkIdx]);
+  view.focusVoiceSpan();
 }
 
 /****************************************************
@@ -249,9 +283,13 @@ VIEW
 *****************************************************/
 let view = {
   displayMissed: function(str) {
+    if (str.length === 0) {return;}
+    $('#missed-headline').css({opacity: 1});
     $('.missed').html(str);
   },
   displayAdded: function(str) {
+    if (str.length === 0) {return;}
+    $('#added-headline').css({opacity: 1});
     $('.added').html(str);
   },
   displayOriginalChunk: function(str) {
@@ -278,7 +316,18 @@ let view = {
       lineNumDisplay = (memoria.currentChunkIdx + 1).toString() + '/' + (memoria.originalChunks.length).toString(); 
     }
     $('#line-location-display').html(lineNumDisplay);
+  },
+  focusVoiceSpan: function() {
+    $("#final-span").focus();
   }
+  // starPulse: function(selector) {
+  //   $(selector).animate({opacity: 0}, 'slow', function() {
+  //     $(selector).animate({opacity: 1}, 'slow', pulse)
+  //   });
+  // },
+  // stopPulse: function(selector) {
+  //   $(selector).stop(false, false).css({opacity: 1});
+  // }
 }
 
 

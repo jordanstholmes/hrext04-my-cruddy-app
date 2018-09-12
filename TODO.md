@@ -4,12 +4,12 @@
 * [x] Button to save source text and begin memorization process
 * [x] Figure out API to input voice to text into text box
 * [x] Input field to make edits
-  * [] protect against newline characters turning into line breaks
+  * [x] protect against newline characters turning into line breaks
 * [x] display missed and added words
 * [x] Check for missing words (without regard for order)
 * [x] Check for extra words
 * [x] Display full correct chunk
-  * [] deal with weird terminal punctuation
+  * [x] deal with weird terminal punctuation
 * [] Button to display source text
 * [x] Button to go to next chunk
 * [x] Button to return to previous chunk
@@ -17,11 +17,12 @@
 * [x] Button to compare voice-to-text vs. stripped chunk
 
 * [] Make line location clickable/editable
-* [] Make buttons have animation https://codemyui.com/pure-css-cartoon-style-angled-button/
+* [x] Make buttons have animation https://codemyui.com/pure-css-cartoon-style-angled-button/
 * [] Make landing page
-* [] Animate recording button
+* [] Animate recording button (pulse)
 * [] Animate transitions between pages
 * [] Make sure background loads before page displays
+* [] fix the movement on linelocation load
 
 
 * [] Add naming memorization sources

@@ -93,6 +93,7 @@ body {
   width: 50%;
   height: 100%;
   float: right;
+  padding: 70px;
 }
 
 .logo {
@@ -137,8 +138,12 @@ body {
 }*/
 
 h1 {
-  /*display: table-row;*/
   font: 40px Arial Black, sans-serif;
+  color: white; 
+}
+
+h2 {
+  font: 35px Arial Black, sans-serif;
   color: white; 
 }
 
@@ -208,6 +213,16 @@ h4 {
 
 #final-span {
   color: rgba(0, 0, 0, .8);
+}
+
+.comparison-details {
+  margin: 20px 0 20px 50px;
+}
+
+#original-chunk {
+  margin-top: 80px;
+  font: 28px Arial Narrow, sans-serif;
+  font-style: italic;
 }
 
 

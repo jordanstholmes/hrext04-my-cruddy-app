@@ -88,17 +88,17 @@ Memoria.prototype.createAddedWords = function() {
 
 Memoria.prototype.getMissedWordsStr = function() {
   if (this.missedWords.length === 0) {
-    return 'Missed: none!';
+    return '';
   } else {
-    return 'Missed: ' + this.missedWords.join(' ');
+    return this.missedWords.join(', ');
   }
 }
 
 Memoria.prototype.getAddedWordsStr = function() {
   if (this.addedWords.length === 0) {
-    return 'Added: none!';
+    return '';
   } else {
-    return 'Added: ' + this.addedWords.join(' ');
+    return this.addedWords.join(', ');
   }
 }
 
@@ -152,15 +152,23 @@ if (!('webkitSpeechRecognition' in window)) {
 $(document).ready(function() {
   view.displayLineLocation();
 
-  $('#speak-button').click(function(event) {
+  $('#mic').click(function(event) {
     speakButton(event);
   });
   $('#memorize-button').click(function() {
     memorizeButton('\n');
   });
-  $('#compare-button').click(function() {
-    compareButton();
+
+  $("html").keyup(function(event) {
+    if (event.keyCode === 13) {
+      // console.log(event);
+        compareButton();
+    }
   });
+
+  // $('#compare-button').click(function() {
+  //   compareButton();
+  // });
   $('#again-button').click(function() {
     againButton();
   });
@@ -241,10 +249,10 @@ VIEW
 *****************************************************/
 let view = {
   displayMissed: function(str) {
-    $('#comparison-missed').html(str);
+    $('.missed').html(str);
   },
   displayAdded: function(str) {
-    $('#comparison-added').html(str);
+    $('.added').html(str);
   },
   displayOriginalChunk: function(str) {
     $('#original-chunk').html(str);

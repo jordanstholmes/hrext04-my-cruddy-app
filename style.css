@@ -112,6 +112,10 @@ body {
   background-color: #FFC222;
 }
 
+/*#comparison-display {
+  opacity: 0;
+}*/
+
 .answer-area{
   height: 80%;
   display: flex;
@@ -144,7 +148,8 @@ h1 {
 
 h2 {
   font: 35px Arial Black, sans-serif;
-  color: white; 
+  color: white;
+  /*opacity: 0;*/
 }
 
 h3 {
@@ -159,6 +164,11 @@ h4 {
   margin: 5px 0 0 15px;
 }
 
+@keyframes changeColor {
+  from {background-color: none;}
+  to {background-color: #FFC222;}
+}
+
 .round-button {
   /*display: inline-block;*/
   display: flex;
@@ -168,6 +178,15 @@ h4 {
   border-radius: 10px;
   font-size: 24px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.round-button:hover {
+  /*color: rgb(197, 90, 17);
+  border: 3px solid rgb(197, 90, 17);*/
+  animation-name: changeColor;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
 }
 
 .memory-nav {
@@ -209,20 +228,24 @@ h4 {
 
 #mic {
   float: right;
+  cursor: pointer;
 }
 
-#final-span {
+.voice-span {
   color: rgba(0, 0, 0, .8);
 }
 
 .comparison-details {
   margin: 20px 0 20px 50px;
+  height: 70px;
+  /*opacity: 0;*/
 }
 
 #original-chunk {
   margin-top: 80px;
   font: 28px Arial Narrow, sans-serif;
   font-style: italic;
+  /*opacity: 0;*/
 }
 
 

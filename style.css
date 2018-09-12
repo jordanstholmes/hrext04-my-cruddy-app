@@ -55,9 +55,73 @@ RESET
 JORDAN CSS
 *****************************************************/
 
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 textarea {
   width: 500px;
   height: 150px;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  /*display: table;*/
+}
+
+header {
+  /*display: table-row;*/
+  display: flex;
+  margin: 20px;
+}
+
+h1 {
+  font: 40px Arial Black, sans-serif;
+  color: white; 
+}
+
+.answer-area{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.answer-box {
+  background: linear-gradient(#562063, #A744BA);
+  width: 85%;
+  height: 400px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.background {
+  background-image: url("assets/abstractbackground.jpg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#left {
+  width: 50%;
+  float: left;
+  height: 100%;
+}
+
+#right {
+  background-color: rgba(197, 90, 17, .6);
+  width: 50%;
+  height: 100%;
+  float: right;
 }
 
 #voice-text-display {

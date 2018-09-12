@@ -15,33 +15,55 @@
 
 <!-- CONTENT -->
   <body>
-    <textarea id="source-text-input" placeholder="Enter the text to memorize"></textarea>
-    <br/>
-    <button id="memorize-button">Memorize</button>
-    <br/>
-    <div id="voice-text-display">
-      <span contenteditable="true" id="final-span"></span>
-      <span id="interim-span"></span>
-    </div>
-    <!-- <textarea id="speech-output" placeholder="What's the next line?"></textarea> -->
-    <br/> 
-    <div id="line-location-display"></div>
-    <button id="speak-button">Speak</button>
-    <button id="compare-button">Compare</button>
-    <button id="again-button">Try Again</button>
-    <button id="next-button">Next</button>
-    <button id="previous-button">Previous</button>
-    <button id="beginning-button">Begining</button>
-    <div id="comparison-box">
-      <div id="original-chunk"></div>
-      <div id="comparison-details">
-        <div id="comparison-missed"></div>
-        <div id="comparison-added"></div>
-      </div>
-    </div>
-    <div id="error-display"></div>
-    <script src="app.js"></script>
+    <div class='background'>
 
+<!-- LEFT SECTION -->
+      <section id='left'>
+
+        <header>
+          <h1 class='title'>Memoria</h1>
+          <img src="assets/white_book_icon.png" style="width:70px;height:70px;">
+        </header>
+
+        <section class='answer-area'>
+          <div class='answer-box'>
+          
+          </div>
+        </section>
+
+
+        <!-- <textarea id="source-text-input" placeholder="Enter the text to memorize"></textarea>
+        <br/>
+        <button id="memorize-button">Memorize</button>
+        <br/>
+        <div id="voice-text-display">
+          <span contenteditable="true" id="final-span"></span>
+          <span id="interim-span"></span>
+        </div>
+        <br/> 
+        <div id="line-location-display"></div>
+        <button id="speak-button">Speak</button>
+        <button id="compare-button">Compare</button>
+        <button id="again-button">Try Again</button>
+        <button id="next-button">Next</button>
+        <button id="previous-button">Previous</button>
+        <button id="beginning-button">Begining</button>
+        <div id="comparison-box">
+          <div id="original-chunk"></div>
+          <div id="comparison-details">
+            <div id="comparison-missed"></div>
+            <div id="comparison-added"></div>
+          </div>
+        </div>
+        <div id="error-display"></div> -->
+      </section>
+
+<!-- RIGHT SECTION -->
+      <section id='right'>
+        
+      </section>
+
+      <script src="app.js"></script>
+    </div>
   </body>
-
 </html>

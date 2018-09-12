@@ -63,44 +63,12 @@ JORDAN CSS
           box-sizing: border-box;
 }
 
-textarea {
-  width: 500px;
-  height: 150px;
-}
-
 html {
   height: 100%;
 }
 
 body {
   height: 100%;
-  /*display: table;*/
-}
-
-header {
-  /*display: table-row;*/
-  display: flex;
-  margin: 20px;
-}
-
-h1 {
-  font: 40px Arial Black, sans-serif;
-  color: white; 
-}
-
-.answer-area{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.answer-box {
-  background: linear-gradient(#562063, #A744BA);
-  width: 85%;
-  height: 400px;
-  margin: auto;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .background {
@@ -122,6 +90,41 @@ h1 {
   width: 50%;
   height: 100%;
   float: right;
+}
+
+header {
+  /*display: table-row;*/
+  display: flex;
+  /*margin: 20px;*/
+  height: 20%;
+  align-items: center;
+  padding: 20px;
+}
+
+.answer-area{
+  height: 80%;
+  display: flex;
+  align-conten: center;
+  /*display: table-row;*/
+}
+
+.answer-box {
+  background: linear-gradient(#562063, #A744BA);
+  width: 85%;
+  height: 400px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+textarea {
+  width: 500px;
+  height: 150px;
+}
+
+h1 {
+  /*display: table-row;*/
+  font: 40px Arial Black, sans-serif;
+  color: white; 
 }
 
 #voice-text-display {

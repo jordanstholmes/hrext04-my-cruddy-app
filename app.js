@@ -146,7 +146,13 @@ if (!('webkitSpeechRecognition' in window)) {
 $(document).ready(function() {
   view.displayLineLocation();
   // $("#final-span").focus();
-  view.focusVoiceSpan();
+  $('.memory-box').animate({height: '400px', opacity: 1}, 1500, function() {
+    $('#memory-box-fade').css({display: 'hidden'});
+    $('#memory-box-fade').show();
+    $('#memory-box-fade').animate({opacity: 1}, 1000, function() {
+      view.focusVoiceSpan();
+    });
+  });
 
   $('#mic').click(function(event) {
     speakButton(event);

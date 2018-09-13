@@ -12,7 +12,7 @@ if (memoria) {
 }
 
 /****************************************************
-MEMORIA CLASS
+CLASSES
 *****************************************************/
 function Memoria(sourceText) {
   this.currentChunkIdx = 0;
@@ -110,31 +110,22 @@ Memoria.prototype.compareCurrentChunk = function(voiceString) {
   this.createChunkWords();
   this.createMissedWords();
   this.createAddedWords();
-  //JORDAN: split the 'compareToChunk' function into smaller pieces and then add to prototype
 }
 
+// function Pulse() {
+//   this.seconds = 0;
+//   this.timer = setInterval(function(my) {
+//     if (my.seconds >= 60) {
+//       view.stopMicPulse();
+//     } else {
+//       this.seconds++;
+//     }
+//   }, 1000, this);
+// }
 
-/*
-JORDAN: you're in the middle of factoring out most of memorizeButton.
-It should just tell the model and the display what to, but not do it itself (perhaps instantiate a memoria object)??
-*/
-
-function memorizeButton(delimeter) {
-  memoria.delimeter = '\n';
-  memoria.sourceText = $('#source-text-input').val(); 
-  memoria.trimSourceInput();
-
-  memoria.createChunks();
-  memoria.createStrippedChunks();
-
-  memoria.currentChunkIdx = 0;
-  view.clearComparisonDisplay();
-  view.clearSourceTextDisplay();
-
-  localStorage.setItem('memoria', JSON.stringify(memoria));
-  view.displayLineLocation();
-  console.log(memoria);
-}
+// Pulse.prototype.stopTimer = function() {
+//   clearInterval(this.timer);
+// }
 
 /****************************************************
 GLOBAL VARIABLES (refactor)
@@ -215,20 +206,34 @@ var controller = {
   },
 }
 
-// this.createVoiceWords();
-//   this.createChunkWords();
-//   this.createMissedWords();
-//   this.createAddedWords();
+function memorizeButton(delimeter) {
+  memoria.delimeter = '\n';
+  memoria.sourceText = $('#source-text-input').val(); 
+  memoria.trimSourceInput();
+
+  memoria.createChunks();
+  memoria.createStrippedChunks();
+
+  memoria.currentChunkIdx = 0;
+  view.clearComparisonDisplay();
+  view.clearSourceTextDisplay();
+
+  localStorage.setItem('memoria', JSON.stringify(memoria));
+  view.displayLineLocation();
+  console.log(memoria);
+}
 
 function speakButton(event) {
   if (recognizing) {
     // view.stopPulse('#mic');
     recognition.stop();
+    view.stopMicPulse();
     return;
   }
 
   // view.startPulse('#mic');
   final_transcript = '';
+  view.startMicPulse();
   recognition.start();
   ignore_onend = false;
   $('#final-span').html('');
@@ -317,7 +322,6 @@ let view = {
   clearComparisonDisplay: function() {
     $('#original-chunk').html('');
     $('#error-display').html('');
-    // $('#final-span').html('');
     $('.comparison-headline').css({opacity: 0, margin: '0 50px'});
     $('.comparison-details').html('');
     $('.comparison-details').css({opacity: 0});
@@ -348,17 +352,23 @@ let view = {
       $("#all-correct").html('');
       $('#all-correct').removeClass('all-correct');
     }, 2100);
+  },
+  // pulses: [],
+  startMicPulse: function() {
+    $('#mic').animate({opacity: 0}, 1000, function() {
+      $('#mic').animate({opacity: 1}, 1000, view.startMicPulse);
+    });
+    // view.pulses.push(new Pulse());
+    // console.log(view.pulses);
+  },
+  stopMicPulse: function() {
+    // view.pulses.forEach(function(pulse) {
+    //   pulse.stopTimer();
+    // });
+    // view.pulses = [];
+    $('#mic').stop(false, false).css({opacity: 1});
   }
-  // starPulse: function(selector) {
-  //   $(selector).animate({opacity: 0}, 'slow', function() {
-  //     $(selector).animate({opacity: 1}, 'slow', pulse)
-  //   });
-  // },
-  // stopPulse: function(selector) {
-  //   $(selector).stop(false, false).css({opacity: 1});
-  // }
 }
-
 
 /****************************************************
 SPEECH RECOGNITION STUFF
@@ -382,6 +392,7 @@ function addErrorBehavior(speechObj) {
   speechObj.onerror = function(event) {
     if (event.error == 'no-speech') {
       console.log('No speech was detected.');
+      view.stopMicPulse();
       ignore_onend = true;
     }
     if (event.error == 'audio-capture') {

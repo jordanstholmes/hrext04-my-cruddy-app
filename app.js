@@ -215,8 +215,13 @@ CONTROLLER
 var controller = {
   getVoiceText: function() {
     return $('#final-span').html().trim();
-  }
+  },
 }
+
+// this.createVoiceWords();
+//   this.createChunkWords();
+//   this.createMissedWords();
+//   this.createAddedWords();
 
 function speakButton(event) {
   if (recognizing) {
@@ -243,6 +248,7 @@ function nextButton() {
     memoria.currentChunkIdx++;
     view.displayLineLocation();
     view.focusVoiceSpan();
+    view.clearVoiceText();
   }
 }
 
@@ -251,6 +257,7 @@ function previousButton() {
     view.displayError('You\'re already at the beginning!');
   } else {
     view.clearComparisonDisplay();
+    view.clearVoiceText();
     memoria.currentChunkIdx--;
     view.displayLineLocation();
     view.focusVoiceSpan();
@@ -260,6 +267,7 @@ function previousButton() {
 function againButton() {
   view.clearComparisonDisplay();
   view.focusVoiceSpan();
+  view.clearVoiceText();
 }
 
 function startOverButton() {
@@ -267,9 +275,11 @@ function startOverButton() {
   memoria.currentChunkIdx = 0;
   view.displayLineLocation();
   view.focusVoiceSpan();
+  view.clearVoiceText();
 } 
 
 function compareButton() {
+  view.clearComparisonDisplay();
   memoria.compareCurrentChunk();
   console.log(memoria.voiceWords);
   view.displayMissed(memoria.getMissedWordsStr());
@@ -300,10 +310,10 @@ let view = {
   },
   clearComparisonDisplay: function() {
     $('#original-chunk').html('');
-    $('#comparison-missed').html('');
-    $('#comparison-added').html('');
     $('#error-display').html('');
-    $('#final-span').html('');
+    // $('#final-span').html('');
+    $('.comparison-headline').css({opacity: 0});
+    $('.comparison-details').html('');
   },
   clearSourceTextDisplay: function() {
     $('#source-text-input').val('');
@@ -319,6 +329,9 @@ let view = {
   },
   focusVoiceSpan: function() {
     $("#final-span").focus();
+  },
+  clearVoiceText: function() {
+    $("#final-span").html('');
   }
   // starPulse: function(selector) {
   //   $(selector).animate({opacity: 0}, 'slow', function() {

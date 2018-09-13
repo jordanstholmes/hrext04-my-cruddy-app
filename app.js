@@ -296,26 +296,31 @@ VIEW
 let view = {
   displayMissed: function(str) {
     if (str.length === 0) {return;}
-    $('#missed-headline').css({opacity: 1});
     $('.missed').html(str);
+    $('#missed-headline').animate({opacity: 1, "margin-left": '1px'}, 500);
+    $('.missed').animate({opacity: 1}, 500);
   },
   displayAdded: function(str) {
     if (str.length === 0) {return;}
-    $('#added-headline').css({opacity: 1});
     $('.added').html(str);
+    $('#added-headline').animate({opacity: 1, "margin-left": '1px'}, 500);
+    $('.added').animate({opacity: 1}, 500);
   },
   displayOriginalChunk: function(str) {
     $('#original-chunk').html(str);
+    // $('#original-chunk').animate({left: '55%'}, 800);
+    $('#original-chunk').animate({opacity: 1}, 500)
   },
   displayError: function(str) {
-    $('#error-display').html(str)
+    $('#error-display').html(str);
   },
   clearComparisonDisplay: function() {
     $('#original-chunk').html('');
     $('#error-display').html('');
     // $('#final-span').html('');
-    $('.comparison-headline').css({opacity: 0});
+    $('.comparison-headline').css({opacity: 0, margin: '0 50px'});
     $('.comparison-details').html('');
+    $('.comparison-details').css({opacity: 0});
     $("#all-correct").html('');
   },
   clearSourceTextDisplay: function() {

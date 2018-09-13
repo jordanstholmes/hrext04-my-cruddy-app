@@ -75,7 +75,14 @@ body {
 }
 
 [contenteditable]:focus {
-    outline: 0px solid transparent;
+  outline: 0px solid transparent;
+}
+
+.comparison-container {
+  /*position: absolute;*/
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .background {
@@ -228,6 +235,10 @@ h4 {
   
 }*/
 
+.comparison-headline {
+  margin: 0 50px;
+}
+
 #line-location-display {
   font: 40px Arial Black, sans-serif;
   color: white;
@@ -247,14 +258,16 @@ h4 {
 .comparison-details {
   margin: 20px 0 20px 50px;
   height: 70px;
-  /*opacity: 0;*/
+  opacity: 0;
 }
 
 #original-chunk {
   margin-top: 80px;
   font: 28px Arial Narrow, sans-serif;
   font-style: italic;
-  /*opacity: 0;*/
+  /*position: absolute;*/
+  /*left: 150%;*/
+  opacity: 0;
 }
 
 /****************************************************

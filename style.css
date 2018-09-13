@@ -54,6 +54,13 @@ RESET
 /****************************************************
 JORDAN CSS
 *****************************************************/
+.background {
+  background-image: url("assets/abstractbackground.jpg");
+  height: 95%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 *,
 *:before,
@@ -85,14 +92,6 @@ body {
   overflow: hidden;
 }
 
-.background {
-  background-image: url("assets/abstractbackground.jpg");
-  height: 95%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 #left {
   width: 50%;
   float: left;
@@ -100,17 +99,23 @@ body {
 }
 
 #right {
-  background-color: rgba(197, 90, 17, .6);
   width: 50%;
   height: 100%;
   float: right;
-  padding: 70px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#right-animation-box {
+  background-color: rgba(197, 90, 17, .6);
+  width: 0;
+  height: 100%;
+  /*padding: 70px;*/
+  padding: 0;
 }
 
 .logo {
-  /*display: table-row;*/
   display: flex;
-  /*margin: 20px;*/
   height: 20%;
   align-items: center;
   padding: 20px;

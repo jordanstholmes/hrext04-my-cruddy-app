@@ -144,15 +144,22 @@ if (!('webkitSpeechRecognition' in window)) {
 }
 
 $(document).ready(function() {
-  view.displayLineLocation();
-  // $("#final-span").focus();
-  $('.memory-box').animate({height: '400px', opacity: 1}, 1500, function() {
-    $('#memory-box-fade').css({display: 'hidden'});
-    $('#memory-box-fade').show();
-    $('#memory-box-fade').animate({opacity: 1}, 1000, function() {
-      view.focusVoiceSpan();
-    });
-  });
+  // view.displayLineLocation();
+  // // $("#final-span").focus();
+  // $('.memory-box').animate({height: '400px', opacity: 1}, 1500, function() {
+  //   $('#memory-box-fade').css({display: 'hidden'});
+  //   $('#memory-box-fade').show();
+  //   $('#memory-box-fade').animate({opacity: 1}, 1000);
+  // });
+
+  view.animateMemoryInterface();
+
+  setInterval(function() {
+    $('#right-animation-box').animate({width: '100%'}, 1000, function() {
+        $('#right-animation-box').css({padding: '70px'});
+        view.focusVoiceSpan();
+      });
+  }, 1500);
 
   $('#mic').click(function(event) {
     speakButton(event);
@@ -373,6 +380,22 @@ let view = {
     // });
     // view.pulses = [];
     $('#mic').stop(false, false).css({opacity: 1});
+  },
+  animateMemoryInterface: function() {
+    view.displayLineLocation();
+    // $("#final-span").focus();
+    $('.memory-box').animate({height: '400px', opacity: 1}, 1500, function() {
+      $('#memory-box-fade').css({display: 'hidden'});
+      $('#memory-box-fade').show();
+      $('#memory-box-fade').animate({opacity: 1}, 1000);
+    });
+
+    setInterval(function() {
+      $('#right-animation-box').animate({width: '100%'}, 1000, function() {
+          $('#right-animation-box').css({padding: '70px'});
+          view.focusVoiceSpan();
+        });
+    }, 1500);
   }
 }
 

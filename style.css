@@ -54,14 +54,6 @@ RESET
 /****************************************************
 JORDAN CSS
 *****************************************************/
-.background {
-  background-image: url("assets/abstractbackground.jpg");
-  height: 95%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 *,
 *:before,
 *:after {
@@ -85,6 +77,27 @@ body {
   outline: 0px solid transparent;
 }
 
+textarea:focus {
+  outline: none;
+}
+
+.background {
+  background-image: url("assets/abstractbackground.jpg");
+  height: 95%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#memory-interface {
+  height: 100%;
+  display: none;
+}
+
+#landing-interface {
+  height: 100%;
+}
+
 .comparison-container {
   /*position: absolute;*/
   width: 100%;
@@ -92,19 +105,38 @@ body {
   overflow: hidden;
 }
 
-#left {
+.left {
   width: 50%;
   float: left;
-  height: 100%;
+  height: 95%;
 }
 
-#right {
+.landing-side {
+  display: flex;
+  align-items: center;
+}
+
+.right {
   width: 50%;
   height: 100%;
   float: right;
+}
+
+.center-box {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  margin: auto;
+}
+
+#memory-right {
   display: flex;
   justify-content: flex-end;
 }
+
+
 
 #right-animation-box {
   background-color: rgba(197, 90, 17, .6);
@@ -119,6 +151,7 @@ body {
   height: 20%;
   align-items: center;
   padding: 20px;
+  opacity: 0;
 }
 
 
@@ -183,27 +216,65 @@ h4 {
   margin: 5px 0 0 15px;
 }
 
-@keyframes changeColor {
+#landing-title {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  width: 60%;
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+@keyframes changeColorYellow {
   from {background-color: none;}
   to {background-color: #FFC222;}
 }
 
-.round-button {
-  /*display: inline-block;*/
+@keyframes changeColorOrange {
+  from {background-color: #FFC222;}
+  to {background-color: #F97015;}
+}
+
+.button {
   display: flex;
   align-items: center;
   padding: 5px 40px;
-  border: 3px solid #FFC222;
-  border-radius: 10px;
   font-size: 24px;
   font-weight: bold;
-  cursor: pointer;
+  cursor: pointer; 
+}
+
+.round-button {
+  /*display: inline-block;*/
+  /*display: flex;
+  align-items: center;
+  padding: 5px 40px;*/
+  border: 3px solid #FFC222;
+  border-radius: 10px;
+  /*font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;*/
+}
+
+#start-button:hover {
+  animation-name: changeColorOrange;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+#start-button {
+  background-color: #FFC222;
+  padding: 15px 40px;
+  background-color: 
 }
 
 .round-button:hover {
   /*color: rgb(197, 90, 17);
   border: 3px solid rgb(197, 90, 17);*/
-  animation-name: changeColor;
+  animation-name: changeColorYellow;
   animation-duration: .5s;
   animation-fill-mode: forwards;
 }
@@ -219,6 +290,21 @@ h4 {
   margin: 25px auto;
   padding: 15px;
   height: 200px;
+}
+
+#source-text-input {
+  margin:100px 60px 0 0;
+  height: 300px;
+  width: 500px;
+  border: 6px solid #FFC222;
+  padding: 15px;
+  opacity: .8;
+  font-size: 20px;
+  color: rgba(0, 0, 0, .6);
+}
+
+#title-input {
+  margin-top: 20px;
 }
 
 #all-correct {

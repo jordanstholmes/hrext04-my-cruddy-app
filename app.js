@@ -144,15 +144,13 @@ if (!('webkitSpeechRecognition' in window)) {
 }
 
 $(document).ready(function() {
-  // view.displayLineLocation();
-  // // $("#final-span").focus();
-  // $('.memory-box').animate({height: '400px', opacity: 1}, 1500, function() {
-  //   $('#memory-box-fade').css({display: 'hidden'});
-  //   $('#memory-box-fade').show();
-  //   $('#memory-box-fade').animate({opacity: 1}, 1000);
-  // });
 
-  view.animateMemoryInterface();
+  $('#start-button').click(function() {
+    console.log('start clicked');
+    view.transitionToMemory();
+  });
+
+  // view.animateMemoryInterface();
 
   setInterval(function() {
     $('#right-animation-box').animate({width: '100%'}, 1000, function() {
@@ -382,10 +380,10 @@ let view = {
     $('#mic').stop(false, false).css({opacity: 1});
   },
   animateMemoryInterface: function() {
+    $('#memory-interface').show();
     view.displayLineLocation();
-    // $("#final-span").focus();
+    $('.logo').animate({opacity: .7}, 3000);
     $('.memory-box').animate({height: '400px', opacity: 1}, 1500, function() {
-      $('#memory-box-fade').css({display: 'hidden'});
       $('#memory-box-fade').show();
       $('#memory-box-fade').animate({opacity: 1}, 1000);
     });
@@ -396,6 +394,13 @@ let view = {
           view.focusVoiceSpan();
         });
     }, 1500);
+  },
+  transitionToMemory: function() {
+    $('#landing-interface').animate({opacity: 0}, 1000, function() {
+      $('#landing-interface').hide();
+      view.animateMemoryInterface();
+      // setTimeout(view.animateMemoryInterface, 500);
+    });
   }
 }
 

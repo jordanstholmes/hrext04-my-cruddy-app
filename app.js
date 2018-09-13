@@ -29,7 +29,9 @@ function Memoria(sourceText) {
 }
 
 Memoria.prototype.createChunks = function() {
-  this.originalChunks = this.sourceText.split(this.delimeter).map(x => x.trim());
+  this.originalChunks = this.sourceText.split(this.delimeter)
+                                       .map(x => x.trim())
+                                       .filter(x => x.length !== 0);
 }
 
 Memoria.prototype.stripPunctuationAndWhiteSpace = function(str) {
@@ -148,6 +150,7 @@ $(document).ready(function() {
   $('#start-button').click(function() {
     console.log('start clicked');
     view.transitionToMemory();
+    memorizeButton();
   });
 
   // view.animateMemoryInterface();
@@ -227,7 +230,7 @@ function memorizeButton(delimeter) {
 
   memoria.currentChunkIdx = 0;
   view.clearComparisonDisplay();
-  view.clearSourceTextDisplay();
+  // view.clearSourceTextDisplay();
 
   localStorage.setItem('memoria', JSON.stringify(memoria));
   view.displayLineLocation();
@@ -294,7 +297,8 @@ function startOverButton() {
 function compareButton() {
   view.clearComparisonDisplay();
   memoria.compareCurrentChunk();
-  console.log(memoria.voiceWords);
+  // console.log(memoria.voiceWords);
+  console.log(memoria.strippedChunks);
   if (memoria.missedWords.length === 0 && memoria.addedWords.length === 0) {
     view.displayAllCorrect();
   } else {

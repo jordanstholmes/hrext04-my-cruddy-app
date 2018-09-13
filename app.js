@@ -168,29 +168,26 @@ $(document).ready(function() {
     view.focusVoiceSpan();
   });
 
-  // $("#final-span").keyup(function(event) {
-  //   if (event.keyCode === 13) {
-  //     // console.log(event);
-  //     compareButton();
-  //     console.log('enter pressed');
-  //   }
-  // });
+  $("#final-span").on('keydown', function(event) {
+    if (event.which === 13) { // enter button
+      event.preventDefault();
+      // console.log(event);
 
-    $("#final-span").on('keydown', function(event) {
-      if (event.which === 13) {
-        event.preventDefault();
-        // console.log(event);
+      compareButton();
+    }
+    if (event.which === 37) { // left arrow button
+      previousButton();
+    }
+    if (event.which === 39) { // right arrow button
+      nextButton();
+    }
+  });
 
-        compareButton();
-      }
-    });
-
-  // $("html").keyup(function(event) {
-  //   if (event.keyCode === 32) {
-  //     // console.log(event);
-  //       speakButton(event);
-  //   }
-  // });
+  $("html").keyup(function(event) {
+    if (event.keyCode === 192) {
+      speakButton(event);
+    }
+  });
 
   // $('#compare-button').click(function() {
   //   compareButton();
@@ -282,9 +279,14 @@ function compareButton() {
   view.clearComparisonDisplay();
   memoria.compareCurrentChunk();
   console.log(memoria.voiceWords);
-  view.displayMissed(memoria.getMissedWordsStr());
-  view.displayAdded(memoria.getAddedWordsStr());
-  view.displayOriginalChunk(memoria.originalChunks[memoria.currentChunkIdx]);
+  if (memoria.missedWords.length === 0 && memoria.addedWords.length === 0) {
+    view.displayAllCorrect();
+  } else {
+    view.displayMissed(memoria.getMissedWordsStr());
+    view.displayAdded(memoria.getAddedWordsStr());
+    view.displayOriginalChunk(memoria.originalChunks[memoria.currentChunkIdx]);
+  }
+  
   view.focusVoiceSpan();
 }
 
@@ -314,6 +316,7 @@ let view = {
     // $('#final-span').html('');
     $('.comparison-headline').css({opacity: 0});
     $('.comparison-details').html('');
+    $("#all-correct").html('');
   },
   clearSourceTextDisplay: function() {
     $('#source-text-input').val('');
@@ -332,6 +335,14 @@ let view = {
   },
   clearVoiceText: function() {
     $("#final-span").html('');
+  },
+  displayAllCorrect: function() {
+    $("#all-correct").html('You nailed it!');
+    $('#all-correct').addClass('all-correct');
+    setTimeout(function() {
+      $("#all-correct").html('');
+      $('#all-correct').removeClass('all-correct');
+    }, 2100);
   }
   // starPulse: function(selector) {
   //   $(selector).animate({opacity: 0}, 'slow', function() {

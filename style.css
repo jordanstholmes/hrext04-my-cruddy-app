@@ -291,6 +291,7 @@ h4 {
 }
 
 #source-text-input {
+  resize: none;
   margin:100px 60px 0 0;
   height: 300px;
   width: 500px;

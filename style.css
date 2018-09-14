@@ -81,6 +81,10 @@ textarea:focus {
   outline: none;
 }
 
+input:focus {
+  outline: none;
+}
+
 .background {
   background-image: url("assets/background_medium_res.jpg");
   height: 95%;
@@ -191,6 +195,30 @@ textarea:focus {
   height: 150px;
 }*/
 
+#title-input-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 100px;
+}
+
+#user-title-tag {
+  font: 30px Arial Black, sans-serif;
+  color: white;
+  opacity: .7;
+  margin-bottom: 6px;
+}
+
+#user-title-input {
+  margin-left: 10px;
+  background-color: transparent;
+  border: none;
+  font: 18px Arial, sans-serif;
+  color: white;
+  caret-color: white;
+}
+
+
 h1 {
   font: 40px Arial Black, sans-serif;
   color: white; 
@@ -292,7 +320,7 @@ h4 {
 
 #source-text-input {
   resize: none;
-  margin:100px 60px 0 0;
+  margin: 10px 60px 0 0;
   height: 300px;
   width: 500px;
   border: 6px solid #FFC222;

@@ -93,6 +93,12 @@ input:focus {
   background-size: cover;
 }
 
+#save-interface {
+  display: none;
+  height: 100%;
+  width: 95%;
+}
+
 #memory-interface {
   height: 100%;
   display: none;

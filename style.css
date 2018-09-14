@@ -151,6 +151,7 @@ textarea:focus {
   align-items: center;
   padding: 20px;
   opacity: 0;
+  cursor: pointer;
 }
 
 
@@ -163,8 +164,6 @@ textarea:focus {
 .answer-area{
   height: 80%;
   display: flex;
-  align-conten: center;
-  /*display: table-row;*/
 }
 
 #memory-box-fade {

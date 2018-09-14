@@ -154,6 +154,10 @@ $(document).ready(function() {
     memorizeButton();
   });
 
+  $('.logo').click(function() {
+    view.transitionToLanding();
+  });
+
   // view.animateMemoryInterface();
 
   // setInterval(function() {
@@ -408,15 +412,26 @@ let view = {
     });
   },
   transitionToLanding: function() {
-    $('#memory-interface')
-    /*
-      .memory-box height back to 0
-      .logo opacity back to 0
-      #memory-box-fade opacity back to 0
-      #right-animation-box width back to  0
-      #comparison-container hide
-      hide #memory-interface
-    */
+    $('#memory-interface').animate({opacity: 0}, 1000, function() {
+      $('#memory-interface').hide();
+      $('#memory-interface').css({opacity: 1});
+      $('#memory-interface').removeAttr('opacity');
+      $('.memory-box').css({height: 0});
+      $('.logo').css({opacity: 0});
+      $('#memory-box-fade').css({opacity: 0});
+      $('#right-animation-box').css({width: 0});
+      $('#comparison-container').hide();
+      $('#landing-interface').show();
+      $('#landing-interface').animate({opacity: 1}, 1000);
+    });
+    
+      // .memory-box height back to 0
+      // .logo opacity back to 0
+      // #memory-box-fade opacity back to 0
+      // #right-animation-box width back to  0
+      // #comparison-container hide
+      // hide #memory-interface
+    
   }
 }
 

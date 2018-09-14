@@ -150,6 +150,8 @@ if (!('webkitSpeechRecognition' in window)) {
 $(document).ready(function() {
 
   $('#start-button').click(function() {
+    let title = $('#user-title-input').val();
+    $('.memory-title').html(title);
     view.transitionToMemory();
     memorizeButton();
   });

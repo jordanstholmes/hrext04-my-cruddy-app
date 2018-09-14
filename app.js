@@ -35,9 +35,11 @@ Memoria.prototype.createChunks = function() {
 }
 
 Memoria.prototype.stripPunctuationAndWhiteSpace = function(str) {
+  // str = str.replace(/['"]+/g, '');
+  str = stripQuotes(str);
   str = str.trim();
-  str = str.split('&nbsp').join(''); // I have a space start in final-span so that it formats correctly. This gets rid of it for parsing.
-  const punctuation = '.,-$?!()[]\'";:@#%/';
+  str = str.split('&nbsp').join(''); // I have a space start in final-span so that it formats correctly. This gets rid of it for parsing.  
+  const punctuation = '.,-$?!()[];:@#%/';
   const whitespaceChars = '\n'
   let stripped = str.split('').filter(function(elem) {
     return !punctuation.includes(elem) && !whitespaceChars.includes(elem);
@@ -148,7 +150,6 @@ if (!('webkitSpeechRecognition' in window)) {
 $(document).ready(function() {
 
   $('#start-button').click(function() {
-    console.log('start clicked');
     view.transitionToMemory();
     memorizeButton();
   });
@@ -479,4 +480,23 @@ function addStartBehavior(speechObj) {
   speechObj.onstart = function() {
     recognizing = true;
   };
+}
+
+function stripQuotes(str) {
+  let strippedStr = '';
+  for (let char of str) {
+    if (!(char === '"' || char === "“" || char === "”" || char === "'" || char === "’" || char === "‘")) {
+      strippedStr += char;
+    }
+  }
+  return strippedStr;
+}
+
+function printFirstWordCharCodes(str) {
+  let words = str.split(' ');
+  let codes = '';
+  for (let i = 0; i < words[0].length; i++) {
+    codes += ", " + words[0].charCodeAt(i);
+  }
+  console.log('first word is:', codes);
 }

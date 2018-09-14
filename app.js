@@ -406,6 +406,17 @@ let view = {
       view.animateMemoryInterface();
       // setTimeout(view.animateMemoryInterface, 500);
     });
+  },
+  transitionToLanding: function() {
+    $('#memory-interface')
+    /*
+      .memory-box height back to 0
+      .logo opacity back to 0
+      #memory-box-fade opacity back to 0
+      #right-animation-box width back to  0
+      #comparison-container hide
+      hide #memory-interface
+    */
   }
 }
 

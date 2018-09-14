@@ -4,12 +4,6 @@
 // Next factor all the DOM stuff to DISPLAY and make the CONTROLLER the intermediary between DISPLAY and MODEL
 
 let memoria;
-// if (memoria) {
-//   memoria = JSON.parse(memoria);
-//   memoria.__proto__ = Memoria.prototype; // JSON.stringify, aparently does not preserve any "not-owned" properties
-// } else {
-//   memoria = new Memoria();
-// }
 
 /****************************************************
 CLASSES
@@ -184,9 +178,6 @@ $(document).ready(function() {
     }
   });
 
-  // $('#compare-button').click(function() {
-  //   compareButton();
-  // });
   $('#again-button').click(function() {
     againButton();
   });
@@ -299,6 +290,10 @@ function compareButton() {
   view.focusVoiceSpan();
 }
 
+function openPreviousButton() {
+
+}
+
 /****************************************************
 VIEW
 *****************************************************/
@@ -408,14 +403,6 @@ let view = {
       $('#landing-interface').show();
       $('#landing-interface').animate({opacity: 1}, 1000);
     });
-    
-      // .memory-box height back to 0
-      // .logo opacity back to 0
-      // #memory-box-fade opacity back to 0
-      // #right-animation-box width back to  0
-      // #comparison-container hide
-      // hide #memory-interface
-    
   }
 }
 

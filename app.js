@@ -412,8 +412,17 @@ let view = {
   transitionToSaveInterface: function() {
     $('#landing-interface').animate({opacity: 0}, 1000, function() {
       $('#landing-interface').hide();
+      view.addSavedButtons();
       $('#save-interface').show();
       $('#save-interface').animate({opacity: 1}, 1000);
+    });
+  },
+  addSavedButtons: function() {
+    let titles = Object.keys(localStorage);
+    $('#save-interface').html('');
+    titles.forEach(function(title) {
+      let memButton = $(`<div class="button square-button save-button">${title}</div>`);
+      $('#save-interface').append(memButton);
     });
   }
 }

@@ -3,20 +3,22 @@
 // JORDAN: at some point you may want to make some of the object properties getters so that you don't get stale data
 // Next factor all the DOM stuff to DISPLAY and make the CONTROLLER the intermediary between DISPLAY and MODEL
 
-let memoria = localStorage.getItem('memoria')
-if (memoria) {
-  memoria = JSON.parse(memoria);
-  memoria.__proto__ = Memoria.prototype; // JSON.stringify, aparently does not preserve any "not-owned" properties
-} else {
-  memoria = new Memoria();
-}
+let memoria;
+// if (memoria) {
+//   memoria = JSON.parse(memoria);
+//   memoria.__proto__ = Memoria.prototype; // JSON.stringify, aparently does not preserve any "not-owned" properties
+// } else {
+//   memoria = new Memoria();
+// }
 
 /****************************************************
 CLASSES
 *****************************************************/
-function Memoria(sourceText) {
+function Memoria(memoryTitle, author, sourceText) {
+  this.memoryTitle = memoryTitle;
+  this.author = author;
   this.currentChunkIdx = 0;
-  this.delimeter = undefined;
+  this.delimeter = '\n';
   this.sourceText = sourceText;
   this.originalChunks = [];
   this.strippedChunks = [];
@@ -26,6 +28,9 @@ function Memoria(sourceText) {
   this.voiceWordsLowerCase = [];
   this.missedWords = [];
   this.addedWords = [];
+  this.trimSourceInput();
+  this.createChunks();
+  this.createStrippedChunks();
 }
 
 Memoria.prototype.createChunks = function() {
@@ -116,21 +121,6 @@ Memoria.prototype.compareCurrentChunk = function(voiceString) {
   this.createAddedWords();
 }
 
-// function Pulse() {
-//   this.seconds = 0;
-//   this.timer = setInterval(function(my) {
-//     if (my.seconds >= 60) {
-//       view.stopMicPulse();
-//     } else {
-//       this.seconds++;
-//     }
-//   }, 1000, this);
-// }
-
-// Pulse.prototype.stopTimer = function() {
-//   clearInterval(this.timer);
-// }
-
 /****************************************************
 GLOBAL VARIABLES (refactor)
 *****************************************************/
@@ -161,15 +151,6 @@ $(document).ready(function() {
   $('.logo').click(function() {
     view.transitionToLanding();
   });
-
-  // view.animateMemoryInterface();
-
-  // setInterval(function() {
-  //   $('#right-animation-box').animate({width: '100%'}, 1000, function() {
-  //       $('#comparison-container').show();
-  //       view.focusVoiceSpan();
-  //     });
-  // }, 1500);
 
   $('#mic').click(function(event) {
     speakButton(event);
@@ -229,13 +210,12 @@ var controller = {
   },
 }
 
-function memorizeButton(delimeter) {
-  memoria.delimeter = '\n';
-  memoria.sourceText = $('#source-text-input').val(); 
-  memoria.trimSourceInput();
+function memorizeButton() {
+  let text = $('#source-text-input').val(); 
+  let title = $('#user-title-input').val();
+  let author = $('#user-author-input').val();
 
-  memoria.createChunks();
-  memoria.createStrippedChunks();
+  memoria = new Memoria(title, author, text);
 
   memoria.currentChunkIdx = 0;
   view.clearComparisonDisplay();

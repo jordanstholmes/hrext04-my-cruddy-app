@@ -142,6 +142,10 @@ $(document).ready(function() {
     memorizeButton();
   });
 
+  $('#saved-button').click(function() {
+    openPreviousButton();
+  });
+
   $('.logo').click(function() {
     view.transitionToLanding();
   });
@@ -291,7 +295,7 @@ function compareButton() {
 }
 
 function openPreviousButton() {
-
+  view.transitionToSaveInterface();
 }
 
 /****************************************************
@@ -402,6 +406,13 @@ let view = {
       $('#comparison-container').hide();
       $('#landing-interface').show();
       $('#landing-interface').animate({opacity: 1}, 1000);
+    });
+  },
+  transitionToSaveInterface: function() {
+    $('#landing-interface').animate({opacity: 0}, 1000, function() {
+      $('#landing-interface').hide();
+      $('#save-interface').show();
+      $('#save-interface').animate({opacity: 1}, 1000);
     });
   }
 }

@@ -216,7 +216,7 @@ function memorizeButton() {
   view.clearComparisonDisplay();
   // view.clearSourceTextDisplay();
 
-  localStorage.setItem('memoria', JSON.stringify(memoria));
+  localStorage.setItem(memoria.memoryTitle, JSON.stringify([memoria.memoryTitle, memoria.author, memoria.sourceText]));
   view.displayLineLocation();
   console.log(memoria);
 }
@@ -295,6 +295,7 @@ function compareButton() {
 }
 
 function openPreviousButton() {
+
   view.transitionToSaveInterface();
 }
 

@@ -98,7 +98,7 @@ input:focus {
   opacity: 0;
   height: 100%;
   width: 95%;
-  padding: 1px;
+  padding: 50px;
 }
 
 #memory-interface {
@@ -283,6 +283,10 @@ BUTTONS
   font-size: 24px;
   font-weight: bold;
   cursor: pointer; 
+}
+
+.save-button {
+  display: inline-block;
 }
 
 .square-button {

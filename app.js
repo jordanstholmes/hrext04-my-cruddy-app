@@ -152,6 +152,8 @@ $(document).ready(function() {
   $('#start-button').click(function() {
     let title = $('#user-title-input').val();
     $('.memory-title').html(title);
+    let author = $('#user-author-input').val();
+    $('.memory-author').html('by ' + author);
     view.transitionToMemory();
     memorizeButton();
   });

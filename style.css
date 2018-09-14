@@ -202,14 +202,14 @@ input:focus {
   margin-top: 100px;
 }
 
-#user-title-tag {
+.user-title-tag {
   font: 30px Arial Black, sans-serif;
   color: white;
   opacity: .7;
   margin-bottom: 6px;
 }
 
-#user-title-input {
+.user-input {
   margin-left: 10px;
   background-color: transparent;
   border: none;

@@ -156,12 +156,12 @@ $(document).ready(function() {
 
   // view.animateMemoryInterface();
 
-  setInterval(function() {
-    $('#right-animation-box').animate({width: '100%'}, 1000, function() {
-        $('#right-animation-box').css({padding: '70px'});
-        view.focusVoiceSpan();
-      });
-  }, 1500);
+  // setInterval(function() {
+  //   $('#right-animation-box').animate({width: '100%'}, 1000, function() {
+  //       $('#comparison-container').show();
+  //       view.focusVoiceSpan();
+  //     });
+  // }, 1500);
 
   $('#mic').click(function(event) {
     speakButton(event);
@@ -395,10 +395,10 @@ let view = {
 
     setInterval(function() {
       $('#right-animation-box').animate({width: '100%'}, 1000, function() {
-          $('#right-animation-box').css({padding: '70px'});
+          $('#comparison-container').show();
           view.focusVoiceSpan();
         });
-    }, 1500);
+    }, 800);
   },
   transitionToMemory: function() {
     $('#landing-interface').animate({opacity: 0}, 1000, function() {

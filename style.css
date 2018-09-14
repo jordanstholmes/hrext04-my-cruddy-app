@@ -260,6 +260,10 @@ h4 {
   margin-bottom: 40px;
 }
 
+/****************************************************
+BUTTONS
+*****************************************************/
+
 @keyframes changeColorYellow {
   from {background-color: none;}
   to {background-color: #FFC222;}
@@ -279,6 +283,18 @@ h4 {
   cursor: pointer; 
 }
 
+.square-button {
+  background-color: #FFC222;
+  padding: 15px 40px;
+  margin: 15px;
+}
+
+.square-button:hover {
+  animation-name: changeColorOrange;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
 .round-button {
   /*display: inline-block;*/
   /*display: flex;
@@ -289,18 +305,6 @@ h4 {
   /*font-size: 24px;
   font-weight: bold;
   cursor: pointer;*/
-}
-
-#start-button:hover {
-  animation-name: changeColorOrange;
-  animation-duration: .5s;
-  animation-fill-mode: forwards;
-}
-
-#start-button {
-  background-color: #FFC222;
-  padding: 15px 40px;
-  background-color: 
 }
 
 .round-button:hover {

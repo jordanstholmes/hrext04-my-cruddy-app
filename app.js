@@ -387,13 +387,10 @@ let view = {
       $('#memory-box-fade').show();
       $('#memory-box-fade').animate({opacity: 1}, 1000);
     });
-
-    setInterval(function() {
       $('#right-animation-box').animate({width: '100%'}, 1000, function() {
           $('#comparison-container').show();
           view.focusVoiceSpan();
-        });
-    }, 800);
+      });
   },
   transitionToMemory: function() {
     if ($('#landing-interface').css('display') === 'none') {
@@ -412,6 +409,8 @@ let view = {
   transitionToLanding: function() {
     $('#memory-interface').animate({opacity: 0}, 1000, function() {
       view.clearComparisonDisplay();
+      console.log('animateion is happening');
+
       $('#memory-interface').hide();
       $('#memory-interface').css({opacity: 1});
       $('#memory-interface').removeAttr('opacity');

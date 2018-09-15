@@ -154,7 +154,7 @@ $(document).ready(function() {
     speakButton(event);
   });
   $('#memorize-button').click(function() {
-    memorizeButton('\n');
+    memorizeButton();
   });
 
   $('#voice-text-input-box').click(function() {
@@ -205,7 +205,11 @@ var controller = {
   },
 }
 
-function memorizeButton() {
+function memorizeButton(memory) {
+  if (memory !== undefined) {
+    
+  }
+
   let text = $('#source-text-input').val(); 
   let title = $('#user-title-input').val();
   let author = $('#user-author-input').val();
@@ -389,11 +393,17 @@ let view = {
     }, 800);
   },
   transitionToMemory: function() {
-    $('#landing-interface').animate({opacity: 0}, 1000, function() {
-      $('#landing-interface').hide();
-      view.animateMemoryInterface();
-      // setTimeout(view.animateMemoryInterface, 500);
-    });
+    if ($('#landing-interface').css('display') === 'none') {
+      $('#save-interface').animate({opacity: 0}, 1000, function() {
+
+      });
+    } else {
+      $('#landing-interface').animate({opacity: 0}, 1000, function() {
+        $('#landing-interface').hide();
+        view.animateMemoryInterface();
+        // setTimeout(view.animateMemoryInterface, 500);
+      });
+    }
   },
   transitionToLanding: function() {
     $('#memory-interface').animate({opacity: 0}, 1000, function() {

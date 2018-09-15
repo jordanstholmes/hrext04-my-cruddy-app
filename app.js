@@ -446,6 +446,11 @@ let view = {
       });
       $('#save-interface').append(memButton);
     });
+    $('#save-interface').append($('<div id="clear-button" class="button square-button">Delete All</div>'));
+    $('#clear-button').click(function() {
+      localStorage.clear();
+      $('#save-interface').empty();
+    });
   }
 }
 

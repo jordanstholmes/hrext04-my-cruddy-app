@@ -276,6 +276,11 @@ BUTTONS
   to {background-color: #F97015;}
 }
 
+@keyframes changeColorRed {
+  from {background-color: #A744BA;}
+  to {background-color: red;}
+}
+
 .button {
   display: flex;
   align-items: center;
@@ -311,6 +316,17 @@ BUTTONS
   /*font-size: 24px;
   font-weight: bold;
   cursor: pointer;*/
+}
+
+#clear-button {
+  background-color: #A744BA;
+  display: inline-block;
+}
+
+#clear-button:hover {
+  animation-name: changeColorRed;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
 }
 
 .round-button:hover {

@@ -299,8 +299,11 @@ function compareButton() {
 }
 
 function openPreviousButton() {
-
   view.transitionToSaveInterface();
+}
+
+function loadSavedMemory() {
+
 }
 
 /****************************************************
@@ -395,7 +398,8 @@ let view = {
   transitionToMemory: function() {
     if ($('#landing-interface').css('display') === 'none') {
       $('#save-interface').animate({opacity: 0}, 1000, function() {
-
+        $('#save-interface').hide();
+        view.animateMemoryInterface();
       });
     } else {
       $('#landing-interface').animate({opacity: 0}, 1000, function() {
@@ -407,6 +411,7 @@ let view = {
   },
   transitionToLanding: function() {
     $('#memory-interface').animate({opacity: 0}, 1000, function() {
+      view.clearComparisonDisplay();
       $('#memory-interface').hide();
       $('#memory-interface').css({opacity: 1});
       $('#memory-interface').removeAttr('opacity');
@@ -422,6 +427,7 @@ let view = {
   transitionToSaveInterface: function() {
     $('#landing-interface').animate({opacity: 0}, 1000, function() {
       $('#landing-interface').hide();
+      // memoria = new Memoria('Test title', 'test author', 'Test this text\nmore text');
       view.addSavedButtons();
       $('#save-interface').show();
       $('#save-interface').animate({opacity: 1}, 1000);
@@ -432,6 +438,13 @@ let view = {
     $('#save-interface').html('');
     titles.forEach(function(title) {
       let memButton = $(`<div class="button square-button save-button">${title}</div>`);
+      memButton.click(function(e) {
+        let key = e.target.textContent;
+        let storedMemory = JSON.parse(localStorage.getItem(key));
+        memoria = new Memoria(...storedMemory);
+        view.transitionToMemory();
+        console.log(memoria);
+      });
       $('#save-interface').append(memButton);
     });
   }
